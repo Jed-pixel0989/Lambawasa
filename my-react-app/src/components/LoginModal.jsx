@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import './LoginModal.css'
 import { api } from '../services/api'
 import {
@@ -9,7 +9,6 @@ import {
   Droplet,
   IdCard,
   Lock,
-  MapPin,
   ArrowRight,
   X,
   AlertTriangle,
@@ -23,8 +22,6 @@ export default function LoginModal({
   onOpenRegister,
   flash,
   initialMode = 'consumer', // 'consumer' | 'field' | 'admin'
-  registeredUsers = [],
-  consumers = [],
   consumerOnly = false,
   consumerAndFieldOnly = false,
 }) {
@@ -32,8 +29,8 @@ export default function LoginModal({
   const [staffRolePreset, setStaffRolePreset] = useState('office')
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
-  const [fieldZone, setFieldZone] = useState('Mabuhay')
   const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Sync mode whenever modal is opened with specific intent
   useEffect(() => {
@@ -57,154 +54,47 @@ export default function LoginModal({
     setError('')
   }
 
-  const isStaffEntry = !consumerOnly && initialMode === 'field'
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const trimmedId = identifier.trim()
-    const trimmedPass = password.trim()
+    const trimmedPass = password
 
     if (!trimmedId || !trimmedPass) {
-      setError('Please provide both username/account number and password.')
+      setError('Please provide your email and password.')
       return
     }
 
-    // 1. CONSUMER / HOUSEHOLD LOGIN FLOW
-    if (authMode === 'consumer') {
-      // Check newly registered accounts
-      const regMatch = registeredUsers.find(
-        (u) =>
-          u.accountNo?.toLowerCase() === trimmedId.toLowerCase() ||
-          u.username?.toLowerCase() === trimmedId.toLowerCase() ||
-          u.consumerId?.toLowerCase() === trimmedId.toLowerCase()
-      )
+    setIsSubmitting(true)
+    setError('')
+    try {
+      const result = await api.login(trimmedId, trimmedPass)
+      if (!result.success) throw new Error(result.error || 'Sign-in failed.')
 
-      if (regMatch) {
-        const consumerMatch = consumers.find(
-          (consumer) =>
-            (regMatch.consumerId && consumer.id === regMatch.consumerId) ||
-            (regMatch.accountNo && consumer.accountNo === regMatch.accountNo) ||
-            (regMatch.username && consumer.username?.toLowerCase() === regMatch.username.toLowerCase()) ||
-            (regMatch.fullName && consumer.name?.toLowerCase() === regMatch.fullName.toLowerCase())
-        )
-        const approvalStatus = consumerMatch?.approvalStatus || regMatch.approvalStatus
-        const accountStatus = consumerMatch?.status || regMatch.status
-
-        if (approvalStatus === 'Pending' || accountStatus === 'Pending Approval' || accountStatus === 'Pending') {
-          setError('This household account is awaiting President approval.')
-          return
-        }
-        if (approvalStatus === 'Rejected' || accountStatus === 'Rejected') {
-          setError('This household account was rejected. Please contact the utility office.')
-          return
-        }
-        onLogin({
-          username: regMatch.username,
-          role: 'House Hold',
-          fullName: regMatch.fullName,
-          consumerId: regMatch.consumerId,
-          accountNo: regMatch.accountNo,
-          meterNo: regMatch.meterNo,
-          zone: regMatch.zone,
-          address: regMatch.address,
-          avatar: regMatch.avatar || 'HC',
-          isNewAccount: regMatch.isNewAccount ?? true,
-        })
-        if (flash) flash(`Welcome, ${regMatch.fullName}! Logged into Consumer Portal.`)
-        onClose()
-        return
+      const user = result.user
+      const isHousehold = user.role === 'House Hold'
+      const isField = ['Field Staffs', 'Technician'].includes(user.role)
+      const wrongStaffPreset = authMode === 'admin'
+        && ((staffRolePreset === 'president' && user.role !== 'President')
+          || (staffRolePreset === 'cashier' && user.role !== 'Cashier')
+          || (staffRolePreset === 'office' && ['President', 'Cashier'].includes(user.role)))
+      if (
+        (authMode === 'consumer' && !isHousehold)
+        || (authMode === 'field' && !isField)
+        || (authMode === 'admin' && (isHousehold || isField))
+        || wrongStaffPreset
+      ) {
+        await api.signOut()
+        throw new Error('This account does not have access to the selected sign-in area.')
       }
 
-      let consumerMatch = consumers.find(
-        (consumer) =>
-          consumer.accountNo?.toLowerCase() === trimmedId.toLowerCase() ||
-          consumer.username?.toLowerCase() === trimmedId.toLowerCase() ||
-          consumer.id?.toLowerCase() === trimmedId.toLowerCase()
-      )
-
-      // Refresh from MySQL when the app opened before its initial sync completed.
-      if (!consumerMatch) {
-        const liveData = await api.fetchSystemData()
-        consumerMatch = liveData?.consumers?.find(
-          (consumer) =>
-            consumer.accountNo?.toLowerCase() === trimmedId.toLowerCase() ||
-            consumer.username?.toLowerCase() === trimmedId.toLowerCase() ||
-            consumer.id?.toLowerCase() === trimmedId.toLowerCase()
-        )
-      }
-
-      if (consumerMatch) {
-        const approvalStatus = consumerMatch.approvalStatus || consumerMatch.status
-        if (approvalStatus === 'Pending' || approvalStatus === 'Pending Approval') {
-          setError('This household account is awaiting President approval.')
-          return
-        }
-        if (approvalStatus === 'Rejected') {
-          setError('This household account was rejected. Please contact the utility office.')
-          return
-        }
-
-        onLogin({
-          username: consumerMatch.username || trimmedId.toLowerCase(),
-          role: 'House Hold',
-          fullName: consumerMatch.name,
-          consumerId: consumerMatch.id,
-          accountNo: consumerMatch.accountNo,
-          meterNo: consumerMatch.meterNo,
-          zone: consumerMatch.zone,
-          address: consumerMatch.address,
-          avatar: consumerMatch.avatar || 'HC',
-          isNewAccount: consumerMatch.isNewAccount ?? false,
-        })
-        if (flash) flash(`Welcome, ${consumerMatch.name}! Logged into Consumer Portal.`)
-        onClose()
-        return
-      }
-
-      setError('Account not found. Register first or use the account number and username from your registration.')
-      return
-    }
-
-    // 2. FIELD STAFF & MAINTENANCE LOGIN FLOW
-    if (authMode === 'field') {
-      const isTomas = trimmedId.toLowerCase().includes('tomas')
-      const isGil = trimmedId.toLowerCase().includes('gil')
-
-      const fieldStaffUser = {
-        username: trimmedId,
-        role: 'Field Staffs',
-        fullName: isTomas ? 'Tomas Cruz' : isGil ? 'Gil Santos' : 'Roberto Ramos',
-        zone: fieldZone,
-        avatar: isTomas ? 'TC' : isGil ? 'GS' : 'RR',
-      }
-
-      onLogin(fieldStaffUser)
-      if (flash) flash(`Field crew terminal active for ${fieldStaffUser.fullName} (${fieldZone} Sector).`)
+      onLogin(user)
+      if (flash) flash(`Welcome, ${user.fullName}.`)
       onClose()
-      return
+    } catch (loginError) {
+      setError(loginError?.message || 'Sign-in failed. Check your email and password.')
+    } finally {
+      setIsSubmitting(false)
     }
-
-    // 3. UTILITY OFFICE / ADMINISTRATOR LOGIN FLOW
-    const isPresident = trimmedId.toLowerCase().includes('president') || trimmedId.toLowerCase().includes('salvador') || staffRolePreset === 'president'
-    const isCashier = trimmedId.toLowerCase().includes('cashier') || trimmedId.toLowerCase().includes('ana') || staffRolePreset === 'cashier'
-    const isOfficeStaff = staffRolePreset === 'office' || (!isPresident && !isCashier && trimmedId.toLowerCase().includes('jamie'))
-
-    const officeUser = {
-      username: trimmedId,
-      role: isPresident ? 'President' : isCashier ? 'Cashier' : isOfficeStaff ? 'Office Staffs' : 'Administrator',
-      fullName: isPresident
-        ? 'Engr. Salvador Lambawasa'
-        : isCashier
-        ? 'Ana Fernandez'
-        : isOfficeStaff
-        ? 'Jamie Dizon'
-        : 'Jamie Dizon',
-      avatar: isPresident ? 'SL' : isCashier ? 'AF' : 'JD',
-    }
-
-    onLogin(officeUser)
-    if (flash) flash(`Logged in as ${officeUser.fullName} (${officeUser.role}).`)
-    onClose()
   }
 
   const themeClass =
@@ -303,7 +193,7 @@ export default function LoginModal({
         {/* Scrollable Form Body */}
         <form onSubmit={handleSubmit} className="mobile-login-body">
           {error && (
-            <div className="mobile-error-pill">
+            <div className="mobile-error-pill" role="alert" aria-live="polite">
               <AlertTriangle size={15} /> {error}
             </div>
           )}
@@ -313,10 +203,10 @@ export default function LoginModal({
             <label className="mobile-field-label">
               <span>
                 {authMode === 'consumer'
-                  ? 'Account No / Username'
+                  ? 'Email address'
                   : authMode === 'field'
-                  ? 'Field Tech Staff ID'
-                  : 'Operator Handle'}
+                  ? 'Field staff email'
+                  : 'Staff email'}
               </span>
             </label>
             <div className="mobile-field-input-wrap">
@@ -325,16 +215,12 @@ export default function LoginModal({
               </span>
               <input
                 className="mobile-field-input"
-                type="text"
+                type="email"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                placeholder={
-                  authMode === 'consumer'
-                    ? 'Account number or username'
-                    : authMode === 'field'
-                    ? 'Field staff username'
-                    : 'Staff username'
-                }
+                placeholder="name@example.com"
+                autoComplete="username"
+                required
                 autoFocus
               />
             </div>
@@ -343,7 +229,7 @@ export default function LoginModal({
           {/* INPUT 2: PASSWORD / PIN */}
           <div className="mobile-field-group">
             <label className="mobile-field-label">
-              <span>{authMode === 'consumer' ? 'Security PIN / Password' : 'Staff Passcode'}</span>
+              <span>Password</span>
             </label>
             <div className="mobile-field-input-wrap">
               <span className="mobile-field-icon"><Lock size={18} /></span>
@@ -353,36 +239,18 @@ export default function LoginModal({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
+                autoComplete="current-password"
+                required
               />
             </div>
           </div>
 
-          {/* INPUT 3 (Only for Field Staff): District Zone Selector */}
-          {authMode === 'field' && (
-            <div className="mobile-field-group">
-              <label className="mobile-field-label">
-                <span>Assigned Field District Sector</span>
-              </label>
-              <div className="mobile-field-input-wrap">
-                <span className="mobile-field-icon"><MapPin size={18} /></span>
-                <select
-                  className="mobile-field-select"
-                  value={fieldZone}
-                  onChange={(e) => setFieldZone(e.target.value)}
-                >
-                  <option value="Mabuhay">Mabuhay Sector (Main District)</option>
-                  <option value="Riverside">Riverside Sector (Mainline 4)</option>
-                  <option value="Hillview">Hillview Ridge (Pressure Booster)</option>
-                  <option value="East Market">East Market Commercial Hub</option>
-                </select>
-              </div>
-            </div>
-          )}
-
           {/* Submit Action */}
-          <button type="submit" className="mobile-login-submit">
+          <button type="submit" className="mobile-login-submit" disabled={isSubmitting}>
             <span>
-              {authMode === 'consumer'
+              {isSubmitting
+                ? 'Signing in…'
+                : authMode === 'consumer'
                 ? 'Sign In to Consumer Portal'
                 : authMode === 'field'
                 ? 'Access Field Staff Terminal'

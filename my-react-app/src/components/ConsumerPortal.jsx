@@ -51,6 +51,7 @@ export default function ConsumerPortal({
   onUpdateProfile,
   onClearNotifications,
   onSignOut,
+  canSubmitServiceRequests = true,
   flash,
 }) {
   // Navigation & View States
@@ -236,7 +237,7 @@ export default function ConsumerPortal({
     }
   }, [activeConsumer.address, activeConsumer.contact, activeConsumer.email, landmarkLocation, profileContact, payContact, profileEmail])
 
-  const handleProfileUpdate = (event) => {
+  const handleProfileUpdate = async (event) => {
     event.preventDefault()
     if (newPassword && newPassword.length < 8) {
       if (flash) flash('New password must be at least 8 characters.')
@@ -247,19 +248,23 @@ export default function ConsumerPortal({
       return
     }
 
-    setNewPassword('')
-    setConfirmNewPassword('')
-    if (profileContact.trim()) {
-      setPayContact(profileContact.trim())
-    }
+    let saved = { success: true }
     if (onUpdateProfile) {
-      onUpdateProfile({
+      saved = await onUpdateProfile({
         email: profileEmail.trim(),
         contact: profileContact.trim(),
         password: newPassword || undefined,
       })
+      if (!saved || saved.success === false) return
     }
-    if (flash) flash('Profile contact & details updated successfully.')
+    setNewPassword('')
+    setConfirmNewPassword('')
+    if (profileContact.trim()) setPayContact(profileContact.trim())
+    if (flash) {
+      flash(saved?.emailConfirmationRequired
+        ? 'Check your current email address to confirm the email change.'
+        : 'Profile contact & details updated successfully.')
+    }
   }
 
   const unpaidBill = myBills.find(
@@ -508,6 +513,10 @@ export default function ConsumerPortal({
   // Submit Complaint / Service Ticket (Aligned with Field Staff Service Desk)
   const handleComplaintSubmit = (e) => {
     e.preventDefault()
+    if (!canSubmitServiceRequests) {
+      if (flash) flash('Household service requests are not connected to Supabase yet. Please contact the utility office.')
+      return
+    }
     const submittedIssueType = issueType === 'Other' ? customIssueType.trim() : issueType
     if (issueType === 'Other' && !submittedIssueType) {
       if (flash) flash('Please describe the problem you want to report.')

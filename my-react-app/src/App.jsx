@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import './App.css'
 
 import {
@@ -38,6 +38,7 @@ import FieldStaffNavigation from './components/FieldStaffNavigation'
 import LoginModal from './components/LoginModal'
 import RegistrationModal from './components/RegistrationModal'
 import { api } from './services/api'
+import { isSupabaseConfigured, supabase } from './services/supabase'
 
 const DEFAULT_SERVICE_BOUNDARY = {
   type: 'polygon',
@@ -101,6 +102,57 @@ function isDemoRecord(record) {
   return false
 }
 
+function stripSensitiveFields(value) {
+  if (Array.isArray(value)) return value.map(stripSensitiveFields)
+  if (!value || typeof value !== 'object') return value
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => !/(password|secret|token)/i.test(key))
+      .map(([key, item]) => [key, stripSensitiveFields(item)])
+  )
+}
+
+function stableSerialize(value) {
+  if (value === undefined || typeof value === 'function' || typeof value === 'symbol') return undefined
+  if (Array.isArray(value)) return `[${value.map((item) => stableSerialize(item) ?? 'null').join(',')}]`
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value).sort()
+      .filter((key) => stableSerialize(value[key]) !== undefined)
+      .map((key) => `${JSON.stringify(key)}:${stableSerialize(value[key])}`)
+      .join(',')}}`
+  }
+  return JSON.stringify(value)
+}
+
+function mergeBootstrapData(payload, bootstrap) {
+  const mergeRecords = (existing, incoming, keyOf, mergeExisting = (stored, item) => ({ ...item, ...stored })) => {
+    const stored = new Map((existing || []).map((item) => [keyOf(item), item]))
+    return [
+      ...incoming.map((item) => {
+        const previous = stored.get(keyOf(item))
+        return previous ? mergeExisting(previous, item) : item
+      }),
+      ...(existing || []).filter((item) => !incoming.some((record) => keyOf(record) === keyOf(item))),
+    ]
+  }
+  return {
+    ...payload,
+    consumers: mergeRecords(payload?.consumers, bootstrap.consumers, (item) => item.id, (stored, item) => ({
+      ...item,
+      ...stored,
+      ...(stored.approvalStatus !== item.approvalStatus
+        ? {
+            status: item.status,
+            approvalStatus: item.approvalStatus,
+            locationApprovalStatus: item.locationApprovalStatus,
+          }
+        : {}),
+    })),
+    meters: mergeRecords(payload?.meters, bootstrap.meters, (item) => item.serialNo),
+    geoPins: mergeRecords(payload?.geoPins, bootstrap.geoPins, (item) => item.consumerId || item.id),
+  }
+}
+
 function clearDemoRecordsFromBrowserStorage() {
   for (const key of DEMO_DATA_STORAGE_KEYS) {
     for (const storageKey of [key, key.replace('lambawasa_', 'water' + 'line_')]) {
@@ -109,9 +161,14 @@ function clearDemoRecordsFromBrowserStorage() {
         if (!stored) continue
         const records = JSON.parse(stored)
         if (Array.isArray(records)) {
-          const remaining = records.filter((record) => !isDemoRecord(record))
-          if (remaining.length !== records.length) {
+          const remaining = records.filter((record) => !isDemoRecord(record)).map(stripSensitiveFields)
+          if (JSON.stringify(remaining) !== JSON.stringify(records)) {
             window.localStorage.setItem(storageKey, JSON.stringify(remaining))
+          }
+        } else {
+          const sanitized = stripSensitiveFields(records)
+          if (JSON.stringify(sanitized) !== JSON.stringify(records)) {
+            window.localStorage.setItem(storageKey, JSON.stringify(sanitized))
           }
         }
       } catch (error) {
@@ -122,9 +179,14 @@ function clearDemoRecordsFromBrowserStorage() {
 
   try {
     const storedUser = window.sessionStorage.getItem('lambawasa_currentUser')
-    if (storedUser && isDemoRecord(JSON.parse(storedUser))) {
-      window.sessionStorage.removeItem('lambawasa_currentUser')
-      window.sessionStorage.removeItem('lambawasa_isLoggedIn')
+    if (storedUser) {
+      const user = JSON.parse(storedUser)
+      if (isDemoRecord(user)) {
+        window.sessionStorage.removeItem('lambawasa_currentUser')
+        window.sessionStorage.removeItem('lambawasa_isLoggedIn')
+      } else {
+        window.sessionStorage.setItem('lambawasa_currentUser', JSON.stringify(stripSensitiveFields(user)))
+      }
     }
   } catch (error) {
     console.warn('Could not clear the sample consumer session.', error)
@@ -277,16 +339,24 @@ function App() {
   // Use sessionStorage for auth — so each browser tab starts with a fresh login.
   // This prevents one user's session bleeding into another user's tab on a shared device.
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    if (isSupabaseConfigured) return false
     try { return JSON.parse(sessionStorage.getItem('lambawasa_isLoggedIn') || 'false') } catch { return false }
   })
+  const [authReady, setAuthReady] = useState(!isSupabaseConfigured)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [loginModalMode, setLoginModalMode] = useState('consumer')
   const [showRegistrationModal, setShowRegistrationModal] = useState(false)
   const [registeredUsers, setRegisteredUsers] = useState(() => {
     clearDemoRecordsFromBrowserStorage()
-    return loadFromStorage('lambawasa_registeredUsers', [])
+    window.localStorage.removeItem('lambawasa_registeredUsers')
+    return []
   })
   const [currentUser, setCurrentUser] = useState(() => {
+    if (isSupabaseConfigured) {
+      sessionStorage.removeItem('lambawasa_currentUser')
+      sessionStorage.removeItem('lambawasa_isLoggedIn')
+      return DEFAULT_CURRENT_USER
+    }
     try {
       const saved = JSON.parse(sessionStorage.getItem('lambawasa_currentUser') || 'null')
       return saved && typeof saved === 'object' ? saved : DEFAULT_CURRENT_USER
@@ -313,9 +383,52 @@ function App() {
   const [ratings, setRatings] = useState(() => loadFromStorage('lambawasa_ratings', initialRatings))
   const [pendingMeterReadings, setPendingMeterReadings] = useState(() => loadFromStorage('lambawasa_pendingMeterReadings', []))
   const [fieldTrackedTicketId, setFieldTrackedTicketId] = useState(null)
+  const [sharedStateReady, setSharedStateReady] = useState(false)
+  const [sharedSaveSequence, setSharedSaveSequence] = useState(0)
+  const [sharedSyncError, setSharedSyncError] = useState('')
+  const sharedStateRevisionRef = useRef(0)
+  const sharedStateUpdatedAtRef = useRef(null)
+  const sharedStateReadyRef = useRef(false)
+  const latestSharedPayloadRef = useRef(null)
+  const sharedStateConflictRef = useRef(false)
+  const sharedSaveQueueRef = useRef(Promise.resolve())
 
-  // Browser storage is the offline fallback when the PHP/MySQL service is unavailable.
-  // Auth state uses sessionStorage — clears on tab close, preventing session bleed between users.
+  useEffect(() => {
+    if (!isSupabaseConfigured) return
+    let active = true
+    api.getCurrentUser()
+      .then((user) => {
+        if (!active || !user) return
+        setCurrentUser({
+          ...user,
+          avatar: user.fullName.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase(),
+        })
+        setIsLoggedIn(true)
+      })
+      .catch((error) => {
+        if (!active) return
+        console.error('Could not restore the Supabase session:', error)
+        setSharedSyncError(error.message || 'Could not verify the saved sign-in session.')
+      })
+      .finally(() => {
+        if (active) setAuthReady(true)
+      })
+    return () => { active = false }
+  }, [])
+
+  useEffect(() => {
+    if (!supabase) return undefined
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_OUT') {
+        setIsLoggedIn(false)
+        setCurrentUser(DEFAULT_CURRENT_USER)
+        setSharedStateReady(false)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
+  // Browser storage remains an offline fallback; authenticated staff data syncs through Supabase.
   useEffect(() => {
     sessionStorage.setItem('lambawasa_isLoggedIn', JSON.stringify(isLoggedIn))
     // Also clear from localStorage so old sessions don't linger
@@ -433,7 +546,7 @@ function App() {
   }, [ratings])
 
   useEffect(() => {
-    localStorage.setItem('lambawasa_registeredUsers', JSON.stringify(registeredUsers))
+    localStorage.removeItem('lambawasa_registeredUsers')
   }, [registeredUsers])
 
   // Automated System Rule: Every unpaid account that passes the 25th of the month is flagged as Overdue with 10% penalty
@@ -484,10 +597,24 @@ function App() {
   // Live MySQL Database State & Synchronization
   const [dbStatus, setDbStatus] = useState(null)
   const [isSyncing, setIsSyncing] = useState(false)
+  const [notice, setNotice] = useState('')
+  const flash = useCallback((message) => {
+    setNotice(message)
+    window.setTimeout(() => setNotice(''), 3000)
+  }, [])
 
   const syncFromDatabase = async (silent = false) => {
     setIsSyncing(true)
     try {
+      if (isSupabaseConfigured) {
+        const status = await api.checkDbStatus()
+        setDbStatus(status)
+        if (!status.connected && !silent) {
+          setSharedSyncError(status.error || 'Could not connect to Supabase.')
+        }
+        return
+      }
+
       const scheduledBilling = await api.runScheduledBilling()
       if (!scheduledBilling.success) {
         console.warn('Scheduled billing check failed:', scheduledBilling.error)
@@ -550,8 +677,9 @@ function App() {
     }
   }
 
-  // Load from MySQL on mount and periodically check DB health
+  // Load legacy MySQL data only when Supabase is not configured.
   useEffect(() => {
+    if (isSupabaseConfigured) return undefined
     syncFromDatabase(true)
     const interval = setInterval(() => syncFromDatabase(true), 25000)
     return () => clearInterval(interval)
@@ -562,21 +690,227 @@ function App() {
   const [globalSearch, setGlobalSearch] = useState('')
   const [globalSearchOpen, setGlobalSearchOpen] = useState(false)
   const [globalNavSearch, setGlobalNavSearch] = useState('')
-  const [notice, setNotice] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false)
 
   const confirmSignOut = () => setShowSignOutConfirm(true)
-  const doSignOut = (msg = 'Successfully signed out.') => {
+  const doSignOut = async (msg = 'Successfully signed out.') => {
     setShowSignOutConfirm(false)
+    if (isSupabaseConfigured) {
+      try {
+        await api.signOut()
+      } catch (error) {
+        flash(`Could not sign out safely: ${error.message}`)
+        return
+      }
+    }
+    setSharedStateReady(false)
     setIsLoggedIn(false)
+    setCurrentUser(DEFAULT_CURRENT_USER)
     flash(msg)
   }
 
-  const flash = (message) => {
-    setNotice(message)
-    window.setTimeout(() => setNotice(''), 3000)
-  }
+  const sharedStatePayload = useMemo(() => {
+    const records = (items) => items.filter((item) => !isDemoRecord(item))
+    const safeRecords = (items) => records(items).map(stripSensitiveFields)
+    return {
+      consumers: safeRecords(consumers),
+      meters: safeRecords(meters),
+      geoPins: safeRecords(geoPins),
+      serviceBoundary: stripSensitiveFields(serviceBoundary),
+      clusterBoundaries: safeRecords(clusterBoundaries),
+      bills: safeRecords(bills),
+      payments: safeRecords(payments),
+      complaints: safeRecords(complaints),
+      auditLogs: safeRecords(auditLogs),
+      staff: safeRecords(staff),
+      notifications: safeRecords(notifications),
+      adjustments: safeRecords(adjustments),
+      ratings: safeRecords(ratings),
+      pendingMeterReadings: safeRecords(pendingMeterReadings),
+    }
+  }, [
+    consumers, meters, geoPins, serviceBoundary, clusterBoundaries, bills, payments,
+    complaints, auditLogs, staff, notifications, adjustments, ratings, pendingMeterReadings,
+  ])
+  const sharedStatePayloadRef = useRef(sharedStatePayload)
+  useEffect(() => {
+    sharedStatePayloadRef.current = sharedStatePayload
+  }, [sharedStatePayload])
+
+  const applySharedState = useCallback((payload) => {
+    if (!payload || typeof payload !== 'object') {
+      throw new Error('Supabase returned an invalid shared-state record.')
+    }
+    if (Array.isArray(payload.consumers)) setConsumers(payload.consumers)
+    if (Array.isArray(payload.meters)) setMeters(payload.meters)
+    if (Array.isArray(payload.geoPins)) setGeoPins(payload.geoPins)
+    if (payload.serviceBoundary?.type === 'polygon') setServiceBoundary(payload.serviceBoundary)
+    if (Array.isArray(payload.clusterBoundaries)) {
+      setClusterBoundaries(withoutNorthbankCluster(payload.clusterBoundaries))
+    }
+    if (Array.isArray(payload.bills)) setBills(payload.bills)
+    if (Array.isArray(payload.payments)) setPayments(payload.payments)
+    if (Array.isArray(payload.complaints)) setComplaints(payload.complaints)
+    if (Array.isArray(payload.auditLogs)) setAuditLogs(payload.auditLogs)
+    if (Array.isArray(payload.staff)) setStaff(payload.staff)
+    if (Array.isArray(payload.notifications)) setNotifications(payload.notifications)
+    if (Array.isArray(payload.adjustments)) setAdjustments(payload.adjustments)
+    if (Array.isArray(payload.ratings)) setRatings(payload.ratings)
+    if (Array.isArray(payload.pendingMeterReadings)) setPendingMeterReadings(payload.pendingMeterReadings)
+  }, [
+    setConsumers, setMeters, setGeoPins, setServiceBoundary, setClusterBoundaries,
+    setBills, setPayments, setComplaints, setAuditLogs, setStaff, setNotifications,
+    setAdjustments, setRatings, setPendingMeterReadings,
+  ])
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !authReady || !isLoggedIn || !currentUser.authUserId
+      || isHouseholdRole(currentUser.role)) {
+      sharedStateReadyRef.current = false
+      return undefined
+    }
+
+    let active = true
+    let unsubscribe = () => {}
+    sharedStateReadyRef.current = false
+    sharedStateConflictRef.current = false
+
+    const hydrate = (record, payload = record?.payload, persistedPayload = payload) => {
+      if (!active || !payload) return
+      latestSharedPayloadRef.current = stripSensitiveFields(persistedPayload)
+      sharedStateUpdatedAtRef.current = record.updated_at
+      sharedStateRevisionRef.current = record.revision
+      applySharedState(stripSensitiveFields(payload))
+    }
+
+    const handleRemoteRecord = (record) => {
+      if (!record?.payload || record.updated_at === sharedStateUpdatedAtRef.current) return
+      if (sharedStateConflictRef.current) return
+      if (stableSerialize(sharedStatePayloadRef.current) === stableSerialize(record.payload)) {
+        hydrate(record)
+        setSharedSyncError('')
+        return
+      }
+      if (stableSerialize(sharedStatePayloadRef.current) !== stableSerialize(latestSharedPayloadRef.current)) {
+        sharedStateConflictRef.current = true
+        setSharedSyncError('Another device has newer edits. Your unsynced changes are still on this device; reload only after copying them elsewhere.')
+        return
+      }
+      hydrate(record)
+      setSharedSyncError('')
+    }
+
+    const initializeSharedState = async () => {
+      try {
+        let record = await api.fetchSharedState()
+        const bootstrap = await api.fetchStaffBootstrapData()
+        if (!record) {
+          try {
+            const initialPayload = mergeBootstrapData(sharedStatePayloadRef.current, bootstrap)
+            record = await api.saveSharedState(initialPayload)
+          } catch (error) {
+            if (error.code !== '23505' && error.code !== '409') throw error
+            record = await api.fetchSharedState()
+          }
+        }
+        if (!active || !record) return
+
+        const payload = mergeBootstrapData(record.payload, bootstrap)
+        hydrate(record, payload, record.payload)
+        setSharedSyncError('')
+        sharedStateReadyRef.current = true
+        setSharedStateReady(true)
+        unsubscribe = api.subscribeSharedState((event) => {
+          handleRemoteRecord(event.new)
+        })
+
+        const interval = window.setInterval(async () => {
+          try {
+            const [latest, refreshedBootstrap] = await Promise.all([
+              api.fetchSharedState(),
+              api.fetchStaffBootstrapData(),
+            ])
+            handleRemoteRecord(latest)
+            if (
+              !sharedStateConflictRef.current
+              && stableSerialize(sharedStatePayloadRef.current) === stableSerialize(latestSharedPayloadRef.current)
+            ) {
+              const merged = mergeBootstrapData(latestSharedPayloadRef.current, refreshedBootstrap)
+              if (stableSerialize(merged) !== stableSerialize(sharedStatePayloadRef.current)) {
+                applySharedState(merged)
+              }
+            }
+          } catch (error) {
+            if (active) {
+              setSharedSyncError(`Could not check for shared updates: ${error.message}`)
+            }
+          }
+        }, 30000)
+        const previousUnsubscribe = unsubscribe
+        unsubscribe = () => {
+          window.clearInterval(interval)
+          previousUnsubscribe()
+        }
+      } catch (error) {
+        if (active) {
+          setSharedSyncError(`Supabase data could not be loaded: ${error.message}`)
+          setSharedStateReady(false)
+        }
+      }
+    }
+
+    initializeSharedState()
+    return () => {
+      active = false
+      sharedStateReadyRef.current = false
+      unsubscribe()
+    }
+  }, [
+    authReady, isLoggedIn, currentUser.authUserId, currentUser.role,
+    applySharedState,
+  ])
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !sharedStateReady || !sharedStateReadyRef.current
+      || sharedStateConflictRef.current || !currentUser.authUserId
+      || isHouseholdRole(currentUser.role)) return undefined
+
+    if (stableSerialize(sharedStatePayload) === stableSerialize(latestSharedPayloadRef.current)) {
+      return undefined
+    }
+
+    const timeout = window.setTimeout(async () => {
+      const payloadToSave = sharedStatePayload
+      sharedSaveQueueRef.current = sharedSaveQueueRef.current.then(async () => {
+        if (sharedStateConflictRef.current) return
+        const saved = await api.saveSharedState(
+          payloadToSave,
+          sharedStateUpdatedAtRef.current,
+          sharedStateRevisionRef.current
+        )
+        sharedStateUpdatedAtRef.current = saved.updated_at
+        sharedStateRevisionRef.current = saved.revision
+        latestSharedPayloadRef.current = stripSensitiveFields(saved.payload)
+        setSharedSyncError('')
+        if (
+          stableSerialize(sharedStatePayloadRef.current)
+          !== stableSerialize(latestSharedPayloadRef.current)
+        ) {
+          setSharedSaveSequence((sequence) => sequence + 1)
+        }
+      }).catch((error) => {
+        if (error.code === 'SYNC_CONFLICT') {
+          sharedStateConflictRef.current = true
+          setSharedSyncError(`${error.message} Your unsynced changes remain on this device.`)
+          return
+        }
+        setSharedSyncError(`Changes could not be saved to Supabase: ${error.message}`)
+      })
+    }, 500)
+
+    return () => window.clearTimeout(timeout)
+  }, [sharedStatePayload, sharedStateReady, sharedSaveSequence, currentUser.authUserId, currentUser.role])
 
   // Audit Logger Helper (Persists to State and MySQL audit_trail)
   const recordAudit = (category, action, target, details) => {
@@ -656,7 +990,15 @@ function App() {
     )
   }
 
-  const handleUpdateConsumerApproval = (consumerId, decision) => {
+  const handleUpdateConsumerApproval = async (consumerId, decision) => {
+    try {
+      const result = await api.updateConsumerApproval(consumerId, decision)
+      if (!result?.success) throw new Error(result?.error || 'The household registration was not updated.')
+    } catch (error) {
+      flash(`Could not update the household registration: ${error.message}`)
+      return
+    }
+
     const nextStatus = decision === 'Approved' ? 'Active' : 'Rejected'
     setConsumers((prev) => prev.map((consumer) => (
       consumer.id === consumerId
@@ -678,10 +1020,6 @@ function App() {
         ? { ...pin, status: decision === 'Approved' ? 'Normal' : 'Rejected' }
         : pin
     )))
-    api.updateConsumerApproval(consumerId, decision).catch((error) => {
-      console.warn('DB consumer approval update failed', error)
-    })
-
     const reviewedConsumer = consumers.find((consumer) => consumer.id === consumerId)
     if (reviewedConsumer) {
       recordAudit(
@@ -695,6 +1033,10 @@ function App() {
   }
 
   const handleRequestConsumerLocationChange = (consumerId, coordinates) => {
+    if (isSupabaseConfigured && isHouseholdRole(currentUser.role)) {
+      flash('Location-change requests are not available in the Supabase portal yet. Contact the utility office.')
+      return
+    }
     setConsumers((prev) => prev.map((consumer) => (
       consumer.id === consumerId
         ? {
@@ -803,7 +1145,9 @@ function App() {
       `${pendingReading.meterSerial} (${target.name})`,
       `Reading submitted from ${officialPreviousReading} m³ to ${current} m³. Awaiting Office Staff confirmation.`
     )
-    flash('Reading saved to the shared database and submitted for Office Staff approval.')
+    flash(result.mode === 'shared_state'
+      ? 'Meter reading queued for synchronization to staff devices.'
+      : 'Reading saved to the shared database and submitted for Office Staff approval.')
     return true
   }
 
@@ -828,13 +1172,34 @@ function App() {
       return false
     }
 
-    const result = await api.correctMeterReading({
+    const correction = calculateConsumptionBill(previousReading, currentReading)
+    const correctionData = {
       consumerId: target.id,
       previousReading,
       currentReading,
       actorName: currentUser.fullName,
       actorRole: currentUser.role,
-    })
+    }
+    const result = isSupabaseConfigured
+      ? {
+          success: true,
+          bill: {
+            id: `WS-${Date.now()}`,
+            consumerId: target.id,
+            name: target.name,
+            accountNo: target.accountNo,
+            zone: target.zone,
+            period: new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+            prevReading: previousReading,
+            presReading: currentReading,
+            ...correction,
+            arrears: 0,
+            penalty: 0,
+            status: 'Ready',
+            dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+          },
+        }
+      : await api.correctMeterReading(correctionData)
     if (!result?.success || !result.bill) {
       flash(`Could not save the corrected meter reading. ${result?.error || 'Try again after refreshing the account data.'}`)
       return false
@@ -925,7 +1290,9 @@ function App() {
       `${pendingReading.meterSerial} (${pendingReading.consumerName})`,
       `Confirmed ${pendingReading.previousReading} m³ → ${pendingReading.currentReading} m³. Statement: ₱ ${savedBillData.totalAmount.toFixed(2)}${savedBillData.penalty ? ` including ₱ ${savedBillData.penalty.toFixed(2)} penalty.` : '.'}`
     )
-    flash(`Reading confirmed. Current statement: ₱ ${savedBillData.totalAmount.toFixed(2)}.`)
+    flash(result.mode === 'shared_state'
+      ? `Reading confirmation queued for synchronization. Current statement: ₱ ${savedBillData.totalAmount.toFixed(2)}.`
+      : `Reading confirmed. Current statement: ₱ ${savedBillData.totalAmount.toFixed(2)}.`)
     return true
   }
 
@@ -952,7 +1319,9 @@ function App() {
       `${pendingReading.meterSerial} (${pendingReading.consumerName})`,
       `Rejected submitted reading of ${pendingReading.currentReading} m³. The official consumer reading was not changed.`
     )
-    flash(`Reading for ${pendingReading.consumerName} was rejected. The official meter reading remains unchanged.`)
+    flash(result.mode === 'shared_state'
+      ? `Reading rejection queued for synchronization. The official reading for ${pendingReading.consumerName} remains unchanged.`
+      : `Reading for ${pendingReading.consumerName} was rejected. The official meter reading remains unchanged.`)
   }
 
   // Action: Update Meter Asset
@@ -1044,7 +1413,9 @@ function App() {
         flash(result?.error || 'Could not save cluster boundaries to the central database.')
         return
       }
-      flash('Cluster boundaries saved for all users.')
+      flash(isSupabaseConfigured
+        ? 'Cluster boundaries queued for synchronization across staff devices.'
+        : 'Cluster boundaries saved for all users.')
     })
 
     const findCluster = (item) => {
@@ -1116,7 +1487,9 @@ function App() {
         flash(result?.error || 'Could not save the service boundary to the central database.')
         return
       }
-      flash('Main service boundary saved for all users.')
+      flash(isSupabaseConfigured
+        ? 'Main service boundary queued for synchronization across staff devices.'
+        : 'Main service boundary saved for all users.')
     })
   }
 
@@ -1268,7 +1641,7 @@ function App() {
       flash('The selected bill could not be found. Refresh and try again.')
       return false
     }
-    const result = await api.updateBillArrears({
+    const adjustment = {
       billId,
       actorName: currentUser.fullName,
       actorRole: currentUser.role,
@@ -1276,7 +1649,17 @@ function App() {
       addedArrears,
       penaltyAmount,
       reason,
-    })
+    }
+    const result = isSupabaseConfigured
+      ? {
+          success: true,
+          data: {
+            dueDate: newDueDate || bill.dueDate,
+            arrears: Number(bill.arrears || 0) + Number(addedArrears || 0),
+            penalty: Number(penaltyAmount ?? bill.penalty ?? 0),
+          },
+        }
+      : await api.updateBillArrears(adjustment)
     if (!result?.success || !result.data) {
       flash(`Could not update this bill in the shared database. ${result?.error || 'Refresh and try again.'}`)
       return false
@@ -1284,6 +1667,11 @@ function App() {
     const updatedBill = {
       ...bill,
       ...result.data,
+      totalAmount: Number(bill.baseAmount || 0)
+        + Number(result.data.arrears || 0)
+        + Number(result.data.penalty || 0)
+        + Number(bill.envFee || 0)
+        + Number(bill.maintFee || 0),
       avatar: bill.avatar,
     }
     setBills((prev) =>
@@ -1338,6 +1726,9 @@ function App() {
 
   // Action: Process Payment at POS
   const handleProcessPayment = async (billId, paymentRecord) => {
+    if (isSupabaseConfigured && isHouseholdRole(currentUser.role)) {
+      throw new Error('Household online payments are not connected to Supabase yet. No payment was recorded.')
+    }
     const isPayMongoPayment = typeof paymentRecord.method === 'string'
       && paymentRecord.method.startsWith('PayMongo')
     const paymentMethod = isPayMongoPayment ? 'GCash' : paymentRecord.method
@@ -1422,6 +1813,10 @@ function App() {
 
   // Action: Add Complaint / Maintenance Ticket
   const handleAddComplaint = (newComplaint) => {
+    if (isSupabaseConfigured && isHouseholdRole(currentUser.role)) {
+      flash('Household service requests are not connected to Supabase yet. Please contact the utility office.')
+      return
+    }
     setComplaints((prev) => [newComplaint, ...prev])
     api.createTicket(newComplaint).then(() => {
       api.checkDbStatus().then((st) => setDbStatus(st))
@@ -1594,6 +1989,10 @@ function App() {
 
   // Action: Rate Service (Consumer Portal)
   const handleRateService = (newRating) => {
+    if (isSupabaseConfigured && isHouseholdRole(currentUser.role)) {
+      flash('Household service ratings are not connected to Supabase yet.')
+      return
+    }
     setRatings((prev) => [newRating, ...prev])
     recordAudit(
       'Service',
@@ -1617,11 +2016,20 @@ function App() {
     setActiveNav('Geographical Mapping')
   }
 
+  if (!authReady) {
+    return (
+      <div className="app-root-landing" role="status" aria-live="polite">
+        Verifying your Lambawasa sign-in…
+      </div>
+    )
+  }
+
   // If user is not logged in, render the public landing page with top right login button
   if (!isLoggedIn) {
     if (isStaffEntryPage) {
       return (
         <div className="app-root-landing">
+          {sharedSyncError && <div role="alert" className="shared-sync-error">{sharedSyncError}</div>}
           <LoginModal
             isOpen={true}
             initialMode="field"
@@ -1635,6 +2043,7 @@ function App() {
             consumers={consumers}
             onLogin={(user) => {
               setCurrentUser({
+                ...user,
                 fullName: user.fullName,
                 email: user.email,
                 role: user.role,
@@ -1652,6 +2061,7 @@ function App() {
                   .join('')
                   .toUpperCase(),
               })
+              setSharedStateReady(false)
               setIsLoggedIn(true)
               if (user.role === 'House Hold') {
                 setActiveNav('My Account')
@@ -1671,6 +2081,7 @@ function App() {
 
     return (
       <div className="app-root-landing">
+        {sharedSyncError && <div role="alert" className="shared-sync-error">{sharedSyncError}</div>}
         {currentPath === '/consumer' || (import.meta.env.MODE === 'consumer' && currentPath === '/') ? (
           <ConsumerLandingPage
             onOpenLogin={(mode) => {
@@ -1711,6 +2122,7 @@ function App() {
           consumers={consumers}
           onLogin={(user) => {
             setCurrentUser({
+              ...user,
               fullName: user.fullName,
               email: user.email,
               role: user.role,
@@ -1729,6 +2141,7 @@ function App() {
                 .toUpperCase(),
             })
             setShowLoginModal(false)
+            setSharedStateReady(false)
             setIsLoggedIn(true)
             if (user.role === 'House Hold') {
               setActiveNav('My Account')
@@ -1748,124 +2161,13 @@ function App() {
           clusterBoundaries={clusterBoundaries}
           onClose={() => setShowRegistrationModal(false)}
           onRegistered={async (user) => {
-            // Generate truly unique account credentials — never use consumers.length (stale closure)
-            const ts = Date.now()
-            const newAccountNo = `ACC-${ts.toString().slice(-6)}`
-            const newConsumerId = `C-${ts}`
-            const newMeterNo = `MTR-${(ts + Math.floor(Math.random() * 9999)).toString().slice(-6)}`
-            const initials = user.fullName
-              .split(' ')
-              .map((n) => n[0])
-              .slice(0, 2)
-              .join('')
-              .toUpperCase()
-
-            const newConsumer = {
-              id: newConsumerId,
-              accountNo: newAccountNo,
-              name: user.fullName,
-              email: user.email,
-              contact: user.mobile,
-              zone: user.zone || 'Mabuhay',
-              cluster: user.cluster || user.zone || null,
-              address: user.address || `${user.zone || 'Mabuhay'} District, Lambawasa`,
-              classification: user.classification || 'Residential',
-              meterNo: newMeterNo,
-              status: 'Pending Approval',
-              approvalStatus: 'Pending',
-              locationApprovalStatus: 'Approved',
-              latitude: user.serviceCoordinates?.lat,
-              longitude: user.serviceCoordinates?.lng,
-              requestedLatitude: user.serviceCoordinates?.lat,
-              requestedLongitude: user.serviceCoordinates?.lng,
-              connectionDate: new Date().toISOString().split('T')[0],
-              lastReading: 0,
-              avatar: initials,
-              username: user.username,
-              isNewAccount: true,
-            }
-
-            // Provision associated meter hardware asset
-            const newMeter = {
-              serialNo: newMeterNo,
-              brand: 'Aquaflow Pro',
-              model: 'AF-20-Brass',
-              size: '1/2 inch',
-              installDate: newConsumer.connectionDate,
-              consumerId: newConsumerId,
-              consumerName: user.fullName,
-              zone: newConsumer.zone,
-              cluster: newConsumer.cluster,
-              lastCalibration: newConsumer.connectionDate,
-              nextCalibration: '2028-09-01',
-              status: 'Pending Approval',
-              approvalStatus: 'Pending',
-              history: [
-                {
-                  date: newConsumer.connectionDate,
-                  type: 'Initial Connection',
-                  technician: 'Jamie Dizon',
-                  notes: 'New household meter line provisioned.',
-                },
-              ],
-            }
-
-            // Provision spatial map pin
-            const newPin = {
-              id: `GP-${geoPins.length + 1}`,
-              consumerId: newConsumerId,
-              name: user.fullName,
-              zone: newConsumer.zone,
-              lat: user.serviceCoordinates?.lat,
-              lng: user.serviceCoordinates?.lng,
-              status: 'Normal',
-              approvalStatus: 'Pending',
-              locationApprovalStatus: 'Approved',
-              meterNo: newMeterNo,
-              reading: 0,
-            }
-
-            // Provision user account record
-            const regUserData = {
-              ...user,
-              id: newConsumerId,
-              consumerId: newConsumerId,
-              accountNo: newAccountNo,
-              meterNo: newMeterNo,
-              avatar: initials,
-              status: 'Pending Approval',
-              isNewAccount: true,
-              approvalStatus: 'Pending',
-            }
-
-            // Persist first so a failed server registration is not shown as successful.
-            const persistenceResponse = await api.addConsumer({
-              ...newConsumer,
-              latitude: user.serviceCoordinates?.lat,
-              longitude: user.serviceCoordinates?.lng,
-              approvalStatus: 'Pending',
-              status: 'Pending Approval',
-            })
-            if (!persistenceResponse?.success) {
-              throw new Error(persistenceResponse?.error || 'The server rejected the consumer registration.')
-            }
-
-            // Save to application states only after the database accepts it.
-            setConsumers((prev) => [newConsumer, ...prev])
-            setMeters((prev) => [newMeter, ...prev])
-            setGeoPins((prev) => [...prev, newPin])
-            setRegisteredUsers((prev) => [regUserData, ...prev.filter((item) => item.username !== user.username)])
-
-            // Record audit log
-            recordAudit(
-              'Consumer',
-              'New Household Registration',
-              `${user.fullName} (${newAccountNo})`,
-              `Self-service registration completed. Meter ${newMeterNo} assigned in ${newConsumer.zone}.`
-            )
-
+            const result = await api.registerConsumer(user)
             setShowRegistrationModal(false)
-            flash(`Registration submitted for President approval. ${user.fullName} can sign in after approval.`)
+            flash(
+              result.confirmationRequired
+                ? `Registration submitted. Check ${user.email} for confirmation, then wait for staff approval before signing in.`
+                : 'Registration submitted and awaiting staff approval.'
+            )
           }}
         />
         {notice && <div className="toast">✓ {notice}</div>}
@@ -1878,6 +2180,7 @@ function App() {
     return (
       <ConsumerPortal
         currentUser={currentUser}
+        canSubmitServiceRequests={!isSupabaseConfigured}
         onClearNotifications={(consumerId, accountNo) => {
           setNotifications((prev) => {
             const toRemove = prev.filter((n) => n.consumerId === consumerId || n.accountNo === accountNo)
@@ -1897,35 +2200,8 @@ function App() {
         onPayBillOnline={(billId, pRecord) => handleProcessPayment(billId, pRecord)}
         onFileComplaint={(complaint) => handleAddComplaint(complaint)}
         onUpdateProfile={async ({ email, contact, password }) => {
-          setCurrentUser((previous) => ({
-            ...previous,
-            ...(email ? { email } : {}),
-            ...(contact ? { contact, contactNo: contact } : {}),
-            ...(password ? { password } : {}),
-          }))
-          setConsumers((previous) => previous.map((consumer) => (
-            consumer.id === currentUser.consumerId || consumer.accountNo === currentUser.accountNo
-              ? {
-                  ...consumer,
-                  ...(email ? { email } : {}),
-                  ...(contact ? { contact, contactNo: contact } : {}),
-                  ...(password ? { password } : {}),
-                }
-              : consumer
-          )))
-          setRegisteredUsers((previous) => previous.map((user) => (
-            user.username === currentUser.username || user.accountNo === currentUser.accountNo
-              ? {
-                  ...user,
-                  ...(email ? { email } : {}),
-                  ...(contact ? { contact, contactNo: contact } : {}),
-                  ...(password ? { password } : {}),
-                }
-              : user
-          )))
-
           try {
-            await api.updateConsumerProfile({
+            const result = await api.updateConsumerProfile({
               consumerId: currentUser.consumerId || currentUser.id || currentUser.accountNo,
               accountNo: currentUser.accountNo,
               username: currentUser.username,
@@ -1933,15 +2209,31 @@ function App() {
               contact,
               password,
             })
+            if (!result?.success) throw new Error(result?.error || 'Profile changes were not saved.')
+            setCurrentUser((previous) => ({
+              ...previous,
+              ...(email && !result.emailConfirmationRequired ? { email } : {}),
+              ...(contact ? { contact, contactNo: contact } : {}),
+            }))
+            setConsumers((previous) => previous.map((consumer) => (
+              consumer.id === currentUser.consumerId || consumer.accountNo === currentUser.accountNo
+                ? {
+                    ...consumer,
+                    ...(email && !result.emailConfirmationRequired ? { email } : {}),
+                    ...(contact ? { contact, contactNo: contact } : {}),
+                  }
+                : consumer
+            )))
+            return { success: true, emailConfirmationRequired: result.emailConfirmationRequired }
           } catch (err) {
-            console.warn('Backend profile update error:', err)
+            flash(`Profile changes could not be saved: ${err.message}`)
+            return false
           }
         }}
         onSignOut={() => {
-          setIsLoggedIn(false)
-          setCurrentUser(DEFAULT_CURRENT_USER)
           setLoginModalMode('consumer')
           setShowLoginModal(true)
+          doSignOut()
         }}
         flash={flash}
       />
@@ -2234,6 +2526,7 @@ function App() {
 
         {/* Dynamic Content Views */}
         <div className="content-wrap">
+          {sharedSyncError && <div role="alert" className="shared-sync-error">{sharedSyncError}</div>}
           {notice && <div className="toast">✓ {notice}</div>}
 
           {/* 0. Executive Overview */}
@@ -2248,10 +2541,7 @@ function App() {
               pendingMeterReadings={pendingMeterReadings}
               initialTrackedTicketId={fieldTrackedTicketId}
               onNavigate={setActiveNav}
-              onSignOut={() => {
-                setIsLoggedIn(false)
-                flash('Field staff signed out.')
-              }}
+              onSignOut={() => doSignOut('Field staff signed out.')}
             />
           )}
 
