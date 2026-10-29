@@ -1692,15 +1692,13 @@ button {
   margin-right: 4px;
 }
 
-.layer-switcher-group,
-.zone-filter-group {
+.layer-switcher-group {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.layer-btn,
-.zone-pill-btn {
+.layer-btn {
   border: 1px solid #dbe4e6;
   background: #fff;
   padding: 5px 11px;
@@ -1711,15 +1709,13 @@ button {
   transition: all 0.15s;
 }
 
-.layer-btn:hover,
-.zone-pill-btn:hover {
+.layer-btn:hover {
   background: #f0fdfa;
   border-color: var(--aqua);
   color: var(--navy);
 }
 
-.layer-btn.active,
-.zone-pill-btn.active {
+.layer-btn.active {
   background: var(--navy);
   color: #fff;
   border-color: var(--navy);
@@ -6410,7 +6406,6 @@ button {
   }
 
   .field-staff-shell .layer-switcher-group,
-  .field-staff-shell .zone-filter-group,
   .field-staff-shell .household-tracker-box {
     display: flex;
     flex-wrap: wrap;
@@ -6425,8 +6420,7 @@ button {
     margin: 0 0 2px;
   }
 
-  .field-staff-shell .layer-btn,
-  .field-staff-shell .zone-pill-btn {
+  .field-staff-shell .layer-btn {
     flex: 1 1 auto;
     min-height: 38px;
     max-width: 100%;

@@ -5,7 +5,6 @@ import {
   Navigation,
   Compass,
   ExternalLink,
-  MapPin,
   Route,
   Layers,
   Search,
@@ -176,7 +175,6 @@ export default function GeographicalMapping({
 
   // View & Filter State
   const [baseMapType, setBaseMapType] = useState('roadmap') // roadmap | satellite | terrain
-  const [selectedZone, setSelectedZone] = useState('All')
   const [selectedPin, setSelectedPin] = useState(null)
   const [searchTrackTerm, setSearchTrackTerm] = useState('')
 
@@ -196,14 +194,6 @@ export default function GeographicalMapping({
   const [draftClusters, setDraftClusters] = useState(clusterBoundaries)
   const [activeBoundaryTarget, setActiveBoundaryTarget] = useState('main')
   const [newClusterName, setNewClusterName] = useState('')
-
-  const clusterOptions = [
-    'All',
-    ...Array.from(new Set([
-      ...draftClusters.map((cluster) => cluster.name),
-      ...pins.map((pin) => pin.cluster || pin.zone),
-    ].filter((name) => name && name.trim().toLowerCase() !== 'northbank'))),
-  ]
 
   // Field Dispatch Modal State
   const [dispatchModal, setDispatchModal] = useState(false)
@@ -447,12 +437,7 @@ export default function GeographicalMapping({
     const markersLayer = markersLayerRef.current
     markersLayer.clearLayers()
 
-    const filteredPins = pins.filter((p) => {
-      if (selectedZone === 'All') return true
-      return (p.cluster || p.zone) === selectedZone
-    })
-
-    filteredPins.forEach((pin) => {
+    pins.forEach((pin) => {
       const latitude = Number(pin.lat ?? pin.latitude)
       const longitude = Number(pin.lng ?? pin.longitude)
       if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return
@@ -486,7 +471,7 @@ export default function GeographicalMapping({
 
       markersLayer.addLayer(marker)
     })
-  }, [pins, selectedZone, selectedPin, isPinModeActive, consumerToPinId])
+  }, [pins, selectedPin, isPinModeActive, consumerToPinId])
 
   useEffect(() => {
     const map = mapInstanceRef.current
@@ -1209,20 +1194,6 @@ export default function GeographicalMapping({
           >
             <Mountain size={13} style={{ marginRight: '5px' }} /> Terrain
           </button>
-        </div>
-
-        {/* Zone Filter Buttons */}
-        <div className="zone-filter-group">
-          <span className="toolbar-label">Zone:</span>
-          {clusterOptions.map((z) => (
-            <button
-              key={z}
-              className={`zone-pill-btn ${selectedZone === z ? 'active' : ''}`}
-              onClick={() => setSelectedZone(z)}
-            >
-              {z}
-            </button>
-          ))}
         </div>
 
         {/* Track User's Household Direct Search */}
