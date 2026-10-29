@@ -1,0 +1,12 @@
+.git
+.github
+.playwright-mcp
+.vscode
+my-react-app/node_modules
+my-react-app/dist
+**/node_modules
+**/dist
+.env
+.env.*
+!.env.example
+*.log

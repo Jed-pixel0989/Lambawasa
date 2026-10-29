@@ -1,0 +1,44 @@
+services:
+  web:
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: waterline_db
+      DB_USER: waterline
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      SIA_SMTP_HOST: ${SIA_SMTP_HOST:-}
+      SIA_SMTP_PORT: ${SIA_SMTP_PORT:-587}
+      SIA_SMTP_USERNAME: ${SIA_SMTP_USERNAME:-}
+      SIA_SMTP_PASSWORD: ${SIA_SMTP_PASSWORD:-}
+      SIA_MAIL_FROM: ${SIA_MAIL_FROM:-}
+      SIA_MAIL_FROM_NAME: ${SIA_MAIL_FROM_NAME:-Lambawasa Municipal Water District}
+      PAYMONGO_SECRET_KEY: ${PAYMONGO_SECRET_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: waterline_db
+      MYSQL_USER: waterline
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+volumes:
+  mysql-data:

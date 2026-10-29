@@ -214,13 +214,14 @@ CREATE TABLE IF NOT EXISTS `maintenance_tickets` (
   `zone` VARCHAR(100) NOT NULL,
   `issue_type` VARCHAR(100) NOT NULL,               -- Low Water Pressure, Pipe Leak, Meter Calibration
   `priority` ENUM('Urgent', 'High', 'Medium', 'Low') NOT NULL DEFAULT 'Medium',
-  `status` ENUM('Reported', 'Pending', 'Dispatched', 'In Progress', 'Resolved') NOT NULL DEFAULT 'Reported',
+  `status` ENUM('Reported', 'Pending', 'Ongoing', 'Dispatched', 'In Progress', 'Resolved') NOT NULL DEFAULT 'Reported',
   `assigned_technician_id` INT DEFAULT NULL,
   `technician_name` VARCHAR(100) DEFAULT NULL,
   `reported_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `resolved_at` DATETIME DEFAULT NULL,
   `description` TEXT NOT NULL,
   `resolution_notes` TEXT DEFAULT NULL,
+  `resolution_image` MEDIUMTEXT DEFAULT NULL,
   CONSTRAINT `fk_tickets_consumer` FOREIGN KEY (`consumer_id`) 
     REFERENCES `consumers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_tickets_tech` FOREIGN KEY (`assigned_technician_id`) 
@@ -263,12 +264,17 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `recipient_name` VARCHAR(120) NOT NULL,
   `account_no` VARCHAR(30) NOT NULL,
   `message` TEXT NOT NULL,
+  `consumer_id` VARCHAR(30) DEFAULT NULL,
+  `ticket_id` VARCHAR(30) DEFAULT NULL,
+  `resolution_image` MEDIUMTEXT DEFAULT NULL,
   `channel` ENUM('SMS', 'Email', 'System Push') NOT NULL DEFAULT 'SMS',
   `status` ENUM('Sent', 'Failed', 'Pending') NOT NULL DEFAULT 'Sent',
   `sent_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   INDEX `idx_notifications_account` (`account_no`),
   INDEX `idx_notifications_type` (`type`),
-  INDEX `idx_notifications_sent_at` (`sent_at`)
+  INDEX `idx_notifications_sent_at` (`sent_at`),
+  INDEX `idx_notifications_consumer_id` (`consumer_id`),
+  INDEX `idx_notifications_ticket_id` (`ticket_id`)
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------------------------------

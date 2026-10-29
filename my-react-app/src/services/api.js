@@ -1,12 +1,11 @@
 // Frontend API Service communicating with XAMPP MySQL waterline_db via PHP endpoints
 
 const getApiUrl = (endpoint) => {
-  // Vite serves the frontend on its own port; PHP remains on XAMPP's web server.
   const vitePort = Number(window.location.port)
   const isViteServer = vitePort === 4173 || (vitePort >= 5173 && vitePort <= 5199)
-  const base = isViteServer
-    ? `${window.location.protocol}//${window.location.hostname}/SIA/api`
-    : `${window.location.origin}/SIA/api`
+  const isLegacySiaInstall = window.location.pathname.startsWith('/SIA/')
+  const apiPath = isViteServer || isLegacySiaInstall ? '/SIA/api' : '/api'
+  const base = `${window.location.origin}${apiPath}`
   return `${base}/${endpoint}`
 }
 

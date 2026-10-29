@@ -30,7 +30,7 @@ try {
         'success' => true,
         'connected' => true,
         'database' => 'waterline_db',
-        'host' => '127.0.0.1:3306',
+        'host' => (getenv('DB_HOST') ?: '127.0.0.1') . ':' . (getenv('DB_PORT') ?: '3306'),
         'server_version' => $version,
         'timestamp' => date('Y-m-d H:i:s'),
         'table_counts' => $counts

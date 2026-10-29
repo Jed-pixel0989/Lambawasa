@@ -1,6 +1,6 @@
 <?php
 // Database configuration & PDO connection helper
-// Target: MySQL 3306 on XAMPP (waterline_db)
+// Uses environment overrides for Docker while keeping XAMPP defaults.
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
@@ -14,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 function getDBConnection() {
     static $pdo = null;
     if ($pdo === null) {
-        $host = '127.0.0.1';
-        $port = '3306';
-        $dbname = 'waterline_db';
-        $user = 'root';
-        $pass = '';
+        $host = getenv('DB_HOST') ?: '127.0.0.1';
+        $port = getenv('DB_PORT') ?: '3306';
+        $dbname = getenv('DB_NAME') ?: 'waterline_db';
+        $user = getenv('DB_USER') ?: 'root';
+        $pass = getenv('DB_PASSWORD') ?: '';
 
         $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4";
         $options = [
