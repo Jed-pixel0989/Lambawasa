@@ -35,13 +35,13 @@ The current Vercel frontend uses Supabase Auth for household registration and si
 1. In Vercel, set the project's **Root Directory** to `my-react-app`.
 2. Set these environment variables for **Production** and **Preview**:
 
-   - `VITE_SUPABASE_URL`: the Supabase project URL.
-   - `VITE_SUPABASE_PUBLISHABLE_KEY`: the Supabase publishable key. The frontend also accepts `VITE_SUPABASE_ANON_KEY`.
+   - `VITE_SUPABASE_URL` (or `NEXT_PUBLIC_SUPABASE_URL`): the Supabase project URL.
+   - `VITE_SUPABASE_PUBLISHABLE_KEY` (or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`): the Supabase publishable key. The frontend also accepts `VITE_SUPABASE_ANON_KEY` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
 3. Run the Supabase setup in [`supabase/README.md`](./supabase/README.md).
 4. Redeploy the Vercel project after setting the variables.
 
-Do not set a Supabase service-role/secret key in a `VITE_*` variable. `VITE_API_BASE_URL` is only for legacy PHP API flows; it does not fix Supabase registration or staff synchronization.
+For this Vite app, use the standard `VITE_*` names when possible. The Vercel config explicitly exposes only the three documented Supabase values from `NEXT_PUBLIC_*`; do not change Vite to expose the entire prefix, as other variables may contain private credentials. The frontend also accepts the existing misspelled `NEXT_PUBLIC_NEXT_PUBLIC_SUPABASE_URL` variable, but rename it to `NEXT_PUBLIC_SUPABASE_URL` in Vercel. Never set a Supabase service-role/secret key in a public `VITE_*` or `NEXT_PUBLIC_*` variable. `VITE_API_BASE_URL` is only for legacy PHP API flows; it does not fix Supabase registration or staff synchronization.
 
 For a deployment that uses the legacy PHP API instead, deploy the Docker stack on a public HTTPS server and set `VITE_API_BASE_URL` to its public API base URL ending in `/api` (for example, `https://api.example.com/api`). Some payment and household-service workflows still depend on PHP and are not yet migrated to Supabase.
 

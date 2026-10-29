@@ -17,10 +17,10 @@ In the Lambawasa Vercel project, add these environment variables for **Productio
 
 | Variable | Value |
 | --- | --- |
-| `VITE_SUPABASE_URL` | Supabase project URL |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key |
+| `VITE_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key |
 
-The frontend also accepts the legacy `VITE_SUPABASE_ANON_KEY` name for the public key. Never put a Supabase service-role/secret key, database password, or other private credential in a `VITE_*` variable or browser code. Redeploy after saving the variables.
+The frontend also accepts the legacy `VITE_SUPABASE_ANON_KEY` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` names for the public key. For `NEXT_PUBLIC_*`, the Vite config explicitly exposes only these Supabase URL/key variables; do not enable the whole prefix because it may include private credentials. Never put a Supabase service-role/secret key, database password, or other private credential in a public `VITE_*` or `NEXT_PUBLIC_*` variable or browser code. Redeploy after saving the variables.
 
 ## 3. Create the first staff account
 
