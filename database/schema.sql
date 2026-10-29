@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `consumers` (
   `consumer_code` VARCHAR(20) NOT NULL UNIQUE,      -- e.g. C-1001
   `account_no` VARCHAR(30) NOT NULL UNIQUE,         -- e.g. ACC-88201
   `username` VARCHAR(50) DEFAULT NULL UNIQUE,
+  `email` VARCHAR(255) DEFAULT NULL,
   `full_name` VARCHAR(120) NOT NULL,
   `contact_no` VARCHAR(25) NOT NULL,
   `service_address` VARCHAR(255) NOT NULL,
@@ -47,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `consumers` (
   `meter_serial` VARCHAR(50) DEFAULT NULL,
   `status` ENUM('Active', 'Overdue', 'Disconnected', 'Pending') NOT NULL DEFAULT 'Active',
   `approval_status` ENUM('Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'Approved',
+  `google_verified_at` DATETIME DEFAULT NULL,
   `location_approval_status` ENUM('None', 'Pending', 'Approved', 'Rejected') NOT NULL DEFAULT 'None',
   `requested_latitude` DECIMAL(10, 6) DEFAULT NULL,
   `requested_longitude` DECIMAL(10, 6) DEFAULT NULL,

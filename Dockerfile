@@ -6,6 +6,8 @@ COPY my-react-app/package.json my-react-app/package-lock.json ./
 RUN npm ci
 
 COPY my-react-app/ ./
+ARG VITE_API_BASE_URL=
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 RUN npm run build -- --base=/
 
 FROM php:8.3-apache

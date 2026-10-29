@@ -5,8 +5,27 @@ const getApiUrl = (endpoint) => {
   const isViteServer = vitePort === 4173 || (vitePort >= 5173 && vitePort <= 5199)
   const isLegacySiaInstall = window.location.pathname.startsWith('/SIA/')
   const apiPath = isViteServer || isLegacySiaInstall ? '/SIA/api' : '/api'
-  const base = `${window.location.origin}${apiPath}`
+  const configuredBase = import.meta.env.VITE_API_BASE_URL?.trim().replace(/\/+$/, '')
+  const base = configuredBase || `${window.location.origin}${apiPath}`
   return `${base}/${endpoint}`
+}
+
+const parseApiResponse = async (response) => {
+  const body = await response.text()
+  if (!body.trim()) {
+    throw new Error(`API returned an empty response (HTTP ${response.status}). Check VITE_API_BASE_URL and the PHP API deployment.`)
+  }
+
+  const contentType = response.headers.get('content-type') || ''
+  if (!contentType.toLowerCase().includes('application/json')) {
+    throw new Error(`API returned ${contentType || 'no content type'} instead of JSON (HTTP ${response.status}). Check VITE_API_BASE_URL.`)
+  }
+
+  try {
+    return JSON.parse(body)
+  } catch {
+    throw new Error(`API returned invalid JSON (HTTP ${response.status}). Check the PHP API logs.`)
+  }
 }
 
 export const api = {
@@ -15,7 +34,7 @@ export const api = {
     try {
       const res = await fetch(getApiUrl('status.php'), { method: 'GET' })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.warn('DB Status Check Error:', err)
       return { success: true, connected: false, mode: 'local', error: err.message }
@@ -27,7 +46,7 @@ export const api = {
     try {
       const res = await fetch(getApiUrl('data.php'), { method: 'GET' })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const json = await res.json()
+      const json = await parseApiResponse(res)
       if (json.success && json.data) {
         return json.data
       }
@@ -45,8 +64,8 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ serviceBoundary, clusterBoundaries }),
       })
-      return await res.json()
-    } catch (err) {
+      return await parseApiResponse(res)
+    } catch {
       localStorage.setItem('lambawasa_serviceBoundary', JSON.stringify(serviceBoundary))
       localStorage.setItem('lambawasa_clusterBoundaries', JSON.stringify(clusterBoundaries))
       return { success: true, mode: 'local' }
@@ -61,7 +80,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(consumerData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API addConsumer error:', err)
       return { success: false, error: err.message }
@@ -75,7 +94,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ consumerId, approvalStatus }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API updateConsumerApproval error:', err)
       return { success: false, error: err.message }
@@ -89,7 +108,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ consumerId, actorRole }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API deleteConsumer error:', err)
       return { success: false, error: err.message }
@@ -103,7 +122,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'profile-update', ...profileData }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API updateConsumerProfile error:', err)
       return { success: false, error: err.message }
@@ -117,7 +136,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'location-request', consumerId, latitude, longitude }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API requestConsumerLocationChange error:', err)
       return { success: false, error: err.message }
@@ -131,7 +150,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'location-decision', consumerId, locationApprovalStatus }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API decideConsumerLocationChange error:', err)
       return { success: false, error: err.message }
@@ -146,7 +165,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(paymentData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API processPayment error:', err)
       return { success: false, error: err.message }
@@ -157,7 +176,7 @@ export const api = {
   async getPaymongoConfig() {
     try {
       const res = await fetch(getApiUrl('paymongo.php?action=config'))
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API getPaymongoConfig error:', err)
       return { success: false, configured: false, error: err.message }
@@ -171,7 +190,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(checkoutData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API createPaymongoCheckout error:', err)
       return { success: false, error: err.message }
@@ -187,7 +206,7 @@ export const api = {
         getApiUrl(`paymongo.php?action=verify&session_id=${encodeURIComponent(sessionId)}`),
         { signal: controller.signal }
       )
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API verifyPaymongoSession error:', err)
       return {
@@ -209,7 +228,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'single', ...billData }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API queueBill error:', err)
       return { success: false, error: err.message }
@@ -223,7 +242,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ billId, actorName, actorRole }),
       })
-      const result = await res.json()
+      const result = await parseApiResponse(res)
       if (!res.ok && result.success) {
         return { success: false, error: `HTTP ${res.status}` }
       }
@@ -241,7 +260,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adjustment),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API updateBillArrears error:', err)
       return { success: false, error: err.message }
@@ -255,7 +274,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(reading),
       })
-      const result = await res.json()
+      const result = await parseApiResponse(res)
       if (!res.ok && result.success) {
         return { success: false, error: `HTTP ${res.status}` }
       }
@@ -273,7 +292,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'president-correction', ...reading }),
       })
-      const result = await res.json()
+      const result = await parseApiResponse(res)
       if (!res.ok && result.success) {
         return { success: false, error: `HTTP ${res.status}` }
       }
@@ -291,7 +310,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ readingId, decision, actorName, actorRole, bill }),
       })
-      const result = await res.json()
+      const result = await parseApiResponse(res)
       if (!res.ok && result.success) {
         return { success: false, error: `HTTP ${res.status}` }
       }
@@ -310,7 +329,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'batch', cycle, targetZone, bills: billsList }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API batchBills error:', err)
       return { success: false, error: err.message }
@@ -320,7 +339,7 @@ export const api = {
   async runScheduledBilling() {
     try {
       const res = await fetch(getApiUrl('bills.php?action=scheduled'), { method: 'GET' })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API scheduled billing error:', err)
       return { success: false, error: err.message }
@@ -335,7 +354,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ticketData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API createTicket error:', err)
       return { success: false, error: err.message }
@@ -350,7 +369,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(ticketData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API updateTicket error:', err)
       return { success: false, error: err.message }
@@ -365,7 +384,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(meterData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API addMeter error:', err)
       return { success: false, error: err.message }
@@ -380,7 +399,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(meterData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API updateMeter error:', err)
       return { success: false, error: err.message }
@@ -395,7 +414,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ serialNo, actorRole }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API deleteMeter error:', err)
       return { success: false, error: err.message }
@@ -410,7 +429,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(auditData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API recordAudit error:', err)
       return { success: false, error: err.message }
@@ -424,7 +443,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(notificationData),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API createNotification error:', err)
       return { success: false, error: err.message }
@@ -439,7 +458,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'login', username, password }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API login error:', err)
       return { success: false, error: err.message }
@@ -454,7 +473,7 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'register', ...userData }),
       })
-      return await res.json()
+      return await parseApiResponse(res)
     } catch (err) {
       console.error('API register error:', err)
       return { success: false, error: err.message }

@@ -58,6 +58,79 @@ const DEFAULT_CURRENT_USER = {
   avatar: 'JD',
 }
 
+const DEMO_NAME_MARKERS = [
+  'Amina Okafor', 'Caleb Mensah', 'Lina Santos', 'Marco Dela Cruz',
+  'Elena Rostova', 'Danilo Aquino', 'Sophia Villanueva', 'Victor Tan Bakery',
+]
+
+const DEMO_RECORD_MARKERS = [
+  ...Array.from({ length: 8 }, (_, index) => `C-${1001 + index}`),
+  ...Array.from({ length: 8 }, (_, index) => `ACC-${88201 + index}`),
+  ...Array.from({ length: 8 }, (_, index) => `MTR-${77291 + index}`),
+  ...Array.from({ length: 8 }, (_, index) => `GP-${index + 1}`),
+  ...Array.from({ length: 5 }, (_, index) => `WS-${[240981, 240977, 240973, 240966, 240955][index]}`),
+  ...Array.from({ length: 4 }, (_, index) => `TKT-${501 + index}`),
+  ...Array.from({ length: 4 }, (_, index) => `SR-2026-${[182, 181, 180, 179][index]}`),
+  'PAY-3000', 'PAY-3001', 'OR-2026-9040', 'OR-2026-9041', 'OR-2026-9042',
+  'NTF-001', 'NTF-002', 'NTF-003', 'NTF-004', 'NTF-005',
+  'ADJ-01', 'ADJ-02', 'ADJ-03', 'RAT-01', 'RAT-02',
+]
+
+const DEMO_DATA_STORAGE_KEYS = [
+  'lambawasa_consumers',
+  'lambawasa_meters',
+  'lambawasa_geoPins',
+  'lambawasa_bills',
+  'lambawasa_payments',
+  'lambawasa_complaints',
+  'lambawasa_auditLogs',
+  'lambawasa_notifications',
+  'lambawasa_adjustments',
+  'lambawasa_ratings',
+  'lambawasa_registeredUsers',
+  'lambawasa_pendingMeterReadings',
+]
+
+function isDemoRecord(record) {
+  if (typeof record === 'string') {
+    return DEMO_RECORD_MARKERS.includes(record)
+      || DEMO_NAME_MARKERS.some((name) => record.includes(name))
+  }
+  if (Array.isArray(record)) return record.some(isDemoRecord)
+  if (record && typeof record === 'object') return Object.values(record).some(isDemoRecord)
+  return false
+}
+
+function clearDemoRecordsFromBrowserStorage() {
+  for (const key of DEMO_DATA_STORAGE_KEYS) {
+    for (const storageKey of [key, key.replace('lambawasa_', 'water' + 'line_')]) {
+      try {
+        const stored = window.localStorage.getItem(storageKey)
+        if (!stored) continue
+        const records = JSON.parse(stored)
+        if (Array.isArray(records)) {
+          const remaining = records.filter((record) => !isDemoRecord(record))
+          if (remaining.length !== records.length) {
+            window.localStorage.setItem(storageKey, JSON.stringify(remaining))
+          }
+        }
+      } catch (error) {
+        console.warn(`Could not remove sample records from ${storageKey}.`, error)
+      }
+    }
+  }
+
+  try {
+    const storedUser = window.sessionStorage.getItem('lambawasa_currentUser')
+    if (storedUser && isDemoRecord(JSON.parse(storedUser))) {
+      window.sessionStorage.removeItem('lambawasa_currentUser')
+      window.sessionStorage.removeItem('lambawasa_isLoggedIn')
+    }
+  } catch (error) {
+    console.warn('Could not clear the sample consumer session.', error)
+  }
+}
+
 function loadCurrentUser() {
   const savedUser = loadFromStorage('lambawasa_currentUser', DEFAULT_CURRENT_USER)
   return savedUser && typeof savedUser === 'object' ? savedUser : DEFAULT_CURRENT_USER
@@ -209,7 +282,10 @@ function App() {
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [loginModalMode, setLoginModalMode] = useState('consumer')
   const [showRegistrationModal, setShowRegistrationModal] = useState(false)
-  const [registeredUsers, setRegisteredUsers] = useState(() => loadFromStorage('lambawasa_registeredUsers', []))
+  const [registeredUsers, setRegisteredUsers] = useState(() => {
+    clearDemoRecordsFromBrowserStorage()
+    return loadFromStorage('lambawasa_registeredUsers', [])
+  })
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = JSON.parse(sessionStorage.getItem('lambawasa_currentUser') || 'null')
@@ -235,7 +311,7 @@ function App() {
   })
   const [adjustments, setAdjustments] = useState(() => loadFromStorage('lambawasa_adjustments', initialAdjustments))
   const [ratings, setRatings] = useState(() => loadFromStorage('lambawasa_ratings', initialRatings))
-  const [pendingMeterReadings, setPendingMeterReadings] = useState([])
+  const [pendingMeterReadings, setPendingMeterReadings] = useState(() => loadFromStorage('lambawasa_pendingMeterReadings', []))
   const [fieldTrackedTicketId, setFieldTrackedTicketId] = useState(null)
 
   // Browser storage is the offline fallback when the PHP/MySQL service is unavailable.

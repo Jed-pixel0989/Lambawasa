@@ -161,35 +161,7 @@ export default function LoginModal({
         return
       }
 
-      const isDemoAccount = [
-        'acc-88201',
-        'c-1001',
-        'amina.okafor',
-        'amina',
-      ].includes(trimmedId.toLowerCase())
-
-      if (!isDemoAccount) {
-        setError('Account not found. Register first or use the account number and username from your registration.')
-        return
-      }
-
-      // Default demo or seed consumer matching (Amina Okafor)
-      const consumerUser = {
-        username: 'amina.okafor',
-        role: 'House Hold',
-        fullName: 'Amina Okafor',
-        consumerId: 'C-1001',
-        accountNo: 'ACC-88201',
-        meterNo: 'MTR-77291',
-        zone: 'Mabuhay',
-        address: 'Block 4 Lot 12, Riverdale Heights',
-        avatar: 'AO',
-        isNewAccount: false,
-      }
-
-      onLogin(consumerUser)
-      if (flash) flash(`Welcome, ${consumerUser.fullName}! Consumer Portal ready.`)
-      onClose()
+      setError('Account not found. Register first or use the account number and username from your registration.')
       return
     }
 
@@ -358,10 +330,10 @@ export default function LoginModal({
                 onChange={(e) => setIdentifier(e.target.value)}
                 placeholder={
                   authMode === 'consumer'
-                    ? 'e.g. ACC-88201 or amina.okafor'
+                    ? 'Account number or username'
                     : authMode === 'field'
-                    ? 'e.g. roberto.ramos'
-                    : 'e.g. jamie.dizon'
+                    ? 'Field staff username'
+                    : 'Staff username'
                 }
                 autoFocus
               />
