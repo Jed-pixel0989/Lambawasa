@@ -190,6 +190,32 @@
   color: #102033;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-forgot-password {
+  border: 0;
+  padding: 2px 0;
+  background: transparent;
+  color: #0284c7;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mobile-forgot-password:hover,
+.mobile-forgot-password:focus-visible {
+  color: #0369a1;
+  text-decoration: underline;
+}
+
+.mobile-forgot-password:focus-visible,
+.mobile-login-footer button:focus-visible {
+  outline: 2px solid #0284c7;
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 
 .mobile-field-input-wrap {
@@ -371,4 +397,22 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.mobile-success-pill {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.mobile-password-help {
+  margin: 0;
+  color: #617286;
+  font-size: 12px;
+  line-height: 1.5;
 }

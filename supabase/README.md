@@ -22,6 +22,8 @@ In the Lambawasa Vercel project, add these environment variables for **Productio
 
 The frontend also accepts the legacy `VITE_SUPABASE_ANON_KEY` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` names for the public key. For `NEXT_PUBLIC_*`, the Vite config explicitly exposes only these Supabase URL/key variables; do not enable the whole prefix because it may include private credentials. Never put a Supabase service-role/secret key, database password, or other private credential in a public `VITE_*` or `NEXT_PUBLIC_*` variable or browser code. Redeploy after saving the variables.
 
+For password recovery, configure Supabase **Authentication → URL Configuration** with the deployed app URL as the **Site URL** and add that URL to **Redirect URLs**. For local Vite testing, allow `http://localhost:5173/**`. Recovery emails return to the current app origin; the user then chooses a new password in the app.
+
 ## 3. Create the first staff account
 
 1. Create the staff login in Supabase **Authentication** using its email and password.
@@ -41,6 +43,8 @@ values (
 ```
 
 Only a project owner should assign privileged roles. The app verifies the profile linked to the signed-in Auth UUID; it does not infer a role from the email or username.
+
+The Auth trigger that creates household profiles runs only for users whose `app_role` metadata is `House Hold`. Staff Auth users can therefore be created without household registration metadata.
 
 ## 4. Sign in and verify synchronization
 

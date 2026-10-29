@@ -24,38 +24,112 @@ export default function LoginModal({
   initialMode = 'consumer', // 'consumer' | 'field' | 'admin'
   consumerOnly = false,
   consumerAndFieldOnly = false,
+  passwordRecoveryMode = false,
+  onPasswordRecoveryComplete,
 }) {
   const [authMode, setAuthMode] = useState(initialMode) // 'consumer' | 'field' | 'admin'
   const [staffRolePreset, setStaffRolePreset] = useState('office')
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [passwordFlow, setPasswordFlow] = useState(passwordRecoveryMode ? 'update' : 'login')
+  const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const isRecoveryActive = passwordRecoveryMode || passwordFlow === 'update'
 
-  // Sync mode whenever modal is opened with specific intent
+  // Reset form-local state when the modal opens or its login area changes.
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (isOpen) {
       setAuthMode(initialMode)
       setStaffRolePreset(initialMode === 'consumer' ? 'consumer' : initialMode === 'field' ? 'field' : 'office')
       setIdentifier('')
       setPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+      setPasswordFlow('login')
+      setNotice('')
       setError('')
     }
   }, [isOpen, initialMode])
+
+  useEffect(() => {
+    if (passwordRecoveryMode) {
+      setPasswordFlow('update')
+      setPassword('')
+      setError('')
+      setNotice('')
+    }
+  }, [passwordRecoveryMode])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   if (!isOpen) return null
 
   // Quick switch tab handlers
   const handleSwitchTab = (mode, preset = 'office') => {
+    setPasswordFlow('login')
     setAuthMode(mode)
     setStaffRolePreset(preset)
     setIdentifier('')
     setPassword('')
+    setNotice('')
     setError('')
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (passwordFlow === 'sent' || passwordFlow === 'updated') return
+
+    if (passwordFlow === 'request') {
+      const email = identifier.trim()
+      if (!email) {
+        setError('Enter your account email address first.')
+        return
+      }
+      setIsSubmitting(true)
+      setError('')
+      setNotice('')
+      try {
+        await api.requestPasswordReset(email)
+        setPasswordFlow('sent')
+        setNotice('If an account exists for this email, a password reset link is on its way.')
+      } catch (requestError) {
+        setError(requestError?.message || 'Could not send the password reset email.')
+      } finally {
+        setIsSubmitting(false)
+      }
+      return
+    }
+
+    if (passwordFlow === 'update') {
+      if (newPassword.length < 8) {
+        setError('Use a password with at least 8 characters.')
+        return
+      }
+      if (newPassword !== confirmPassword) {
+        setError('The passwords do not match.')
+        return
+      }
+      setIsSubmitting(true)
+      setError('')
+      setNotice('')
+      try {
+        await api.updatePassword(newPassword)
+        setPasswordFlow('updated')
+        setNewPassword('')
+        setConfirmPassword('')
+        setNotice('Your password has been updated. You can now sign in with it.')
+        if (onPasswordRecoveryComplete) onPasswordRecoveryComplete()
+      } catch (updateError) {
+        setError(updateError?.message || 'Could not update the password. Request a new reset link and try again.')
+      } finally {
+        setIsSubmitting(false)
+      }
+      return
+    }
+
     const trimmedId = identifier.trim()
     const trimmedPass = password
 
@@ -104,6 +178,14 @@ export default function LoginModal({
       ? 'theme-field'
       : 'theme-admin'
 
+  const handleBackToLogin = () => {
+    setPasswordFlow('login')
+    setNewPassword('')
+    setConfirmPassword('')
+    setNotice('')
+    setError('')
+  }
+
   return (
     <div className="mobile-login-overlay" onClick={onClose}>
       <div className={`mobile-login-card ${themeClass}`} onClick={(e) => e.stopPropagation()}>
@@ -135,7 +217,15 @@ export default function LoginModal({
             </div>
             <div className="mobile-login-titles">
               <h2>
-                {authMode === 'consumer'
+                {passwordFlow === 'request'
+                  ? 'Reset your password'
+                  : passwordFlow === 'sent'
+                  ? 'Check your email'
+                  : passwordFlow === 'update'
+                  ? 'Choose a new password'
+                  : passwordFlow === 'updated'
+                  ? 'Password updated'
+                  : authMode === 'consumer'
                   ? 'Household Consumer'
                   : authMode === 'field'
                   ? 'Field Staff Terminal'
@@ -146,7 +236,9 @@ export default function LoginModal({
                   : 'Operations & Office'}
               </h2>
               <p>
-                {authMode === 'consumer'
+                {isRecoveryActive || passwordFlow !== 'login'
+                  ? 'Securely restore access to your Lambawasa account'
+                  : authMode === 'consumer'
                   ? 'Check water statements, meter twin & pay bills'
                   : authMode === 'field'
                   ? 'Mobile meter reading, GIS mapping & work orders'
@@ -156,7 +248,7 @@ export default function LoginModal({
           </div>
 
           {/* Segmented Role Switcher (Touch-friendly Mobile Tabs) */}
-          {!consumerOnly && !consumerAndFieldOnly && (
+          {!isRecoveryActive && passwordFlow === 'login' && !consumerOnly && !consumerAndFieldOnly && (
           <div className="mobile-role-segmented">
             <button
               type="button"
@@ -197,23 +289,29 @@ export default function LoginModal({
               <AlertTriangle size={15} /> {error}
             </div>
           )}
+          {notice && (
+            <div className="mobile-success-pill" role="status" aria-live="polite">
+              {notice}
+            </div>
+          )}
 
+          {passwordFlow === 'login' && (
+          <>
           {/* INPUT 1: CONSUMER vs FIELD vs ADMIN */}
           <div className="mobile-field-group">
-            <label className="mobile-field-label">
-              <span>
+            <label className="mobile-field-label" htmlFor="login-email">
                 {authMode === 'consumer'
                   ? 'Email address'
                   : authMode === 'field'
                   ? 'Field staff email'
                   : 'Staff email'}
-              </span>
             </label>
             <div className="mobile-field-input-wrap">
               <span className="mobile-field-icon">
                 {authMode === 'field' ? <IdCard size={18} /> : <User size={18} />}
               </span>
               <input
+                id="login-email"
                 className="mobile-field-input"
                 type="email"
                 value={identifier}
@@ -228,12 +326,25 @@ export default function LoginModal({
 
           {/* INPUT 2: PASSWORD / PIN */}
           <div className="mobile-field-group">
-            <label className="mobile-field-label">
-              <span>Password</span>
-            </label>
+            <div className="mobile-field-label">
+              <label htmlFor="login-password">Password</label>
+              <button
+                type="button"
+                className="mobile-forgot-password"
+                onClick={() => {
+                  setPasswordFlow('request')
+                  setPassword('')
+                  setNotice('')
+                  setError('')
+                }}
+              >
+                Forgot password?
+              </button>
+            </div>
             <div className="mobile-field-input-wrap">
               <span className="mobile-field-icon"><Lock size={18} /></span>
               <input
+                id="login-password"
                 className="mobile-field-input"
                 type="password"
                 value={password}
@@ -262,9 +373,104 @@ export default function LoginModal({
             </span>
             <ArrowRight size={18} />
           </button>
+          </>
+          )}
+
+          {passwordFlow === 'request' && (
+            <>
+              <p className="mobile-password-help">
+                Enter the email address for your account. We’ll send a secure reset link if it’s registered.
+              </p>
+              <div className="mobile-field-group">
+                <label className="mobile-field-label" htmlFor="password-reset-email">Email address</label>
+                <div className="mobile-field-input-wrap">
+                  <span className="mobile-field-icon"><User size={18} /></span>
+                  <input
+                    id="password-reset-email"
+                    className="mobile-field-input"
+                    type="email"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    placeholder="name@example.com"
+                    autoComplete="email"
+                    required
+                    autoFocus
+                  />
+                </div>
+              </div>
+              <button type="submit" className="mobile-login-submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending link…' : 'Send reset link'}
+                <ArrowRight size={18} />
+              </button>
+              <div className="mobile-login-footer">
+                <button type="button" onClick={handleBackToLogin}>Back to sign in</button>
+              </div>
+            </>
+          )}
+
+          {passwordFlow === 'sent' && (
+            <div className="mobile-login-footer">
+              <button type="button" onClick={() => {
+                setPasswordFlow('request')
+                setNotice('')
+                setError('')
+              }}>Try another email</button>
+              <button type="button" onClick={handleBackToLogin}>Back to sign in</button>
+            </div>
+          )}
+
+          {passwordFlow === 'update' && (
+            <>
+              <p className="mobile-password-help">Choose a new password with at least 8 characters.</p>
+              <div className="mobile-field-group">
+                <label className="mobile-field-label" htmlFor="new-password">New password</label>
+                <div className="mobile-field-input-wrap">
+                  <span className="mobile-field-icon"><Lock size={18} /></span>
+                  <input
+                    id="new-password"
+                    className="mobile-field-input"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    autoComplete="new-password"
+                    minLength={8}
+                    required
+                    autoFocus
+                  />
+                </div>
+              </div>
+              <div className="mobile-field-group">
+                <label className="mobile-field-label" htmlFor="confirm-new-password">Confirm new password</label>
+                <div className="mobile-field-input-wrap">
+                  <span className="mobile-field-icon"><Lock size={18} /></span>
+                  <input
+                    id="confirm-new-password"
+                    className="mobile-field-input"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    autoComplete="new-password"
+                    minLength={8}
+                    required
+                  />
+                </div>
+              </div>
+              <button type="submit" className="mobile-login-submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Updating password…' : 'Update password'}
+                <ArrowRight size={18} />
+              </button>
+            </>
+          )}
+
+          {passwordFlow === 'updated' && (
+            <button type="button" className="mobile-login-submit" onClick={handleBackToLogin}>
+              Back to sign in
+              <ArrowRight size={18} />
+            </button>
+          )}
 
           {/* Consumer Registration Link */}
-          {authMode === 'consumer' && onOpenRegister && (
+          {passwordFlow === 'login' && authMode === 'consumer' && onOpenRegister && (
             <div className="mobile-login-footer">
               <span>New household in Lambawasa?</span>
               <button type="button" onClick={onOpenRegister}>

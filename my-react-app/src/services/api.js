@@ -849,6 +849,20 @@ export const api = {
     }
   },
 
+  async requestPasswordReset(email) {
+    const client = requireSupabase()
+    const { error } = await client.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
+      redirectTo: window.location.origin,
+    })
+    if (error) throw error
+  },
+
+  async updatePassword(password) {
+    const client = requireSupabase()
+    const { error } = await client.auth.updateUser({ password })
+    if (error) throw error
+  },
+
   // Auth: Register
   async register(userData) {
     try {

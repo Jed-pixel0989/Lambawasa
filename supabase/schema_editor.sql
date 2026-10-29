@@ -88,7 +88,7 @@ declare
   consumer_zone text := coalesce(nullif(metadata ->> 'zone', ''), 'Mabuhay');
   meter_code text := 'MTR-' || upper(substr(replace(new.id::text, '-', ''), 25, 8));
 begin
-  if metadata ->> 'app_role' <> 'House Hold' then
+  if coalesce(metadata ->> 'app_role', '') <> 'House Hold' then
     return new;
   end if;
 
@@ -150,7 +150,9 @@ drop trigger if exists create_consumer_profile_after_signup on auth.users
   EXECUTE $command$
 create trigger create_consumer_profile_after_signup
   after insert on auth.users
-  for each row execute function public.create_consumer_from_auth()
+  for each row
+  when (new.raw_user_meta_data ->> 'app_role' = 'House Hold')
+  execute function public.create_consumer_from_auth()
   $command$;
   EXECUTE $command$
 create table if not exists public.meter_assets (

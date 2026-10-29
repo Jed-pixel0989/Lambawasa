@@ -345,6 +345,8 @@ function App() {
   const [authReady, setAuthReady] = useState(!isSupabaseConfigured)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [loginModalMode, setLoginModalMode] = useState('consumer')
+  const [passwordRecoveryMode, setPasswordRecoveryMode] = useState(false)
+  const passwordRecoveryRef = useRef(false)
   const [showRegistrationModal, setShowRegistrationModal] = useState(false)
   const [registeredUsers, setRegisteredUsers] = useState(() => {
     clearDemoRecordsFromBrowserStorage()
@@ -398,7 +400,7 @@ function App() {
     let active = true
     api.getCurrentUser()
       .then((user) => {
-        if (!active || !user) return
+        if (!active || !user || passwordRecoveryRef.current) return
         setCurrentUser({
           ...user,
           avatar: user.fullName.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase(),
@@ -419,7 +421,13 @@ function App() {
   useEffect(() => {
     if (!supabase) return undefined
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_OUT') {
+      if (event === 'PASSWORD_RECOVERY') {
+        passwordRecoveryRef.current = true
+        setIsLoggedIn(false)
+        setCurrentUser(DEFAULT_CURRENT_USER)
+        setPasswordRecoveryMode(true)
+        setShowLoginModal(true)
+      } else if (event === 'SIGNED_OUT') {
         setIsLoggedIn(false)
         setCurrentUser(DEFAULT_CURRENT_USER)
         setSharedStateReady(false)
@@ -2074,6 +2082,11 @@ function App() {
               }
             }}
             flash={flash}
+            passwordRecoveryMode={passwordRecoveryMode}
+            onPasswordRecoveryComplete={() => {
+              passwordRecoveryRef.current = false
+              setPasswordRecoveryMode(false)
+            }}
           />
         </div>
       )
@@ -2154,6 +2167,11 @@ function App() {
             }
           }}
           flash={flash}
+          passwordRecoveryMode={passwordRecoveryMode}
+          onPasswordRecoveryComplete={() => {
+            passwordRecoveryRef.current = false
+            setPasswordRecoveryMode(false)
+          }}
         />
         <RegistrationModal
           isOpen={showRegistrationModal}
