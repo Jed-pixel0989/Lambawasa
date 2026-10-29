@@ -1,0 +1,200 @@
+- generic [ref=f1e3]:
+  - complementary [ref=f1e4]:
+    - generic [ref=f1e10] [cursor=pointer]:
+      - strong [ref=f1e11]: LAMBAWASA
+      - generic [ref=f1e12]: Integrated Utility Suite
+    - generic [ref=f1e13]:
+      - text: OFFICE STAFFS
+      - generic [ref=f1e14]: 8 ACTIVE
+    - navigation [ref=f1e15]:
+      - button "Overview" [ref=f1e16] [cursor=pointer]
+      - button "Reports" [ref=f1e24] [cursor=pointer]
+      - button "Notifications" [ref=f1e29] [cursor=pointer]
+      - button "Consumers" [ref=f1e35] [cursor=pointer]
+      - button "Meter Assets" [ref=f1e43] [cursor=pointer]
+      - button "Batch Billing" [ref=f1e49] [cursor=pointer]:
+        - generic [ref=f1e54]: "2"
+      - button "Arrears & Penalties" [ref=f1e55] [cursor=pointer]
+      - button "Report Problem" [ref=f1e60] [cursor=pointer]:
+        - generic [ref=f1e70]: "1"
+  - main [ref=f1e71]:
+    - generic [ref=f1e72]:
+      - generic [ref=f1e73]:
+        - text: Lambawasa System
+        - emphasis [ref=f1e74]: /
+        - strong [ref=f1e75]: Overview
+      - generic [ref=f1e76]:
+        - generic [ref=f1e78]:
+          - generic [ref=f1e79]: ⌕
+          - textbox "⌕" [ref=f1e80]:
+            - /placeholder: Global account, meter or bill search...
+        - generic [ref=f1e81]:
+          - generic "Click to Sign Out" [ref=f1e82] [cursor=pointer]:
+            - generic [ref=f1e83]: MR
+            - generic [ref=f1e84]:
+              - strong [ref=f1e85]: Maria Reyes
+              - generic [ref=f1e86]: Office Staffs
+          - button "Sign Out" [ref=f1e87] [cursor=pointer]
+    - generic [ref=f1e93]:
+      - generic [ref=f1e94]:
+        - generic [ref=f1e95]:
+          - paragraph [ref=f1e96]: OFFICE OPERATIONS & BILLING CONTROL DESK · LAMBAWASA
+          - heading "Good day, Maria ✦" [level=1] [ref=f1e97]
+          - paragraph [ref=f1e98]: Consumer household profiling, automated batch billing runs, customer notices, and problem reports are live.
+        - generic [ref=f1e99]:
+          - button "Run Batch Billing (2)" [ref=f1e100] [cursor=pointer]
+          - button "Dispatch Notices" [ref=f1e103] [cursor=pointer]
+          - button "Register Consumer" [ref=f1e107] [cursor=pointer]
+      - generic [ref=f1e111]:
+        - article [ref=f1e112]:
+          - generic [ref=f1e113]: Total Collections
+          - strong [ref=f1e118]: ₱ 189,569.00
+          - paragraph [ref=f1e119]:
+            - mark [ref=f1e120]: ↑ 14.2%
+            - text: vs last billing cycle
+        - article [ref=f1e132]:
+          - generic [ref=f1e133]: Active Connections
+          - strong [ref=f1e141]: 2,483
+          - paragraph [ref=f1e142]:
+            - mark [ref=f1e143]: ↑ 5.1%
+            - text: new households profiled
+        - article [ref=f1e155]:
+          - generic [ref=f1e156]: Outstanding Balance
+          - strong [ref=f1e161]: ₱ 42,815.25
+          - paragraph [ref=f1e162]: 0 accounts flagged for penalty
+          - generic [ref=f1e165]: 88% collected this period
+        - article [ref=f1e166]:
+          - generic [ref=f1e167]: Meter Reading Accuracy
+          - strong [ref=f1e173]: 98.6%
+          - paragraph [ref=f1e174]:
+            - mark [ref=f1e175]: ↑ 2.4%
+            - text: accuracy with calibration
+          - generic [ref=f1e176]: 98%
+      - generic [ref=f1e178]:
+        - article [ref=f1e179]:
+          - generic [ref=f1e180]:
+            - generic [ref=f1e181]:
+              - paragraph [ref=f1e182]: BILLING OPERATIONS
+              - heading "Recent Verified Bills" [level=2] [ref=f1e183]
+            - button "Open Batch Billing →" [ref=f1e184] [cursor=pointer]
+          - generic [ref=f1e185]:
+            - generic [ref=f1e186]:
+              - generic [ref=f1e187]: CONSUMER
+              - generic [ref=f1e188]: PERIOD
+              - generic [ref=f1e189]: AMOUNT
+              - generic [ref=f1e190]: STATUS
+            - generic [ref=f1e191]:
+              - generic [ref=f1e192]:
+                - generic [ref=f1e193]: LZ
+                - generic [ref=f1e194]:
+                  - strong [ref=f1e195]: lee zabala
+                  - generic [ref=f1e196]: WS-202610-0018 · Bagong Silang
+              - generic [ref=f1e197]: October 1, 2026 - October 31, 2026
+              - strong [ref=f1e198]: ₱ 223.00
+              - generic [ref=f1e199]: Ready
+            - generic [ref=f1e201]:
+              - generic [ref=f1e202]:
+                - generic [ref=f1e203]: JB
+                - generic [ref=f1e204]:
+                  - strong [ref=f1e205]: Jed bandoy
+                  - generic [ref=f1e206]: WS-202610-0017 · Mabuhay
+              - generic [ref=f1e207]: October 1, 2026 - October 31, 2026
+              - strong [ref=f1e208]: ₱ 223.00
+              - generic [ref=f1e209]: Ready
+            - generic [ref=f1e211]:
+              - generic [ref=f1e212]:
+                - generic [ref=f1e213]: LZ
+                - generic [ref=f1e214]:
+                  - strong [ref=f1e215]: lee zabala
+                  - generic [ref=f1e216]: WS-240985 · Bagong Silang
+              - generic [ref=f1e217]: Sep 01 – Sep 30, 2026
+              - strong [ref=f1e218]: ₱ 223.00
+              - generic [ref=f1e219]: Paid
+            - generic [ref=f1e221]:
+              - generic [ref=f1e222]:
+                - generic [ref=f1e223]: LZ
+                - generic [ref=f1e224]:
+                  - strong [ref=f1e225]: lee zabala
+                  - generic [ref=f1e226]: WS-240984 · Bagong Silang
+              - generic [ref=f1e227]: Sep 01 – Sep 30, 2026
+              - strong [ref=f1e228]: ₱ 223.00
+              - generic [ref=f1e229]: Paid
+        - article [ref=f1e231]:
+          - generic [ref=f1e232]:
+            - generic [ref=f1e233]:
+              - paragraph [ref=f1e234]: NETWORK COVERAGE
+              - heading "Geographical Map" [level=2] [ref=f1e235]
+            - button "Full Spatial View →" [ref=f1e236] [cursor=pointer]
+          - generic [ref=f1e237] [cursor=pointer]:
+            - generic [ref=f1e242]: ●
+            - generic [ref=f1e243]: ●
+            - generic [ref=f1e244]: ●
+            - generic [ref=f1e245]: ●
+            - generic [ref=f1e246]:
+              - text: MABUHAY
+              - generic [ref=f1e247]: "486"
+            - generic [ref=f1e248]:
+              - text: RIVERSIDE
+              - generic [ref=f1e249]: "328"
+            - generic [ref=f1e250]:
+              - text: EAST MARKET
+              - generic [ref=f1e251]: "514"
+            - generic [ref=f1e252]:
+              - generic [ref=f1e253]: Active
+              - generic [ref=f1e255]: Attention
+          - generic [ref=f1e257]:
+            - generic [ref=f1e258]: 2,483 mapped connections
+            - button "Launch GIS Inspector →" [ref=f1e259] [cursor=pointer]
+      - generic [ref=f1e260]:
+        - article [ref=f1e261]:
+          - generic [ref=f1e263]:
+            - paragraph [ref=f1e264]: FEATURE LAUNCHPAD
+            - heading "Quick Actions Across All 9 Systems" [level=2] [ref=f1e265]
+          - generic [ref=f1e266]:
+            - button "♧ Profiling Consumer records →" [ref=f1e267] [cursor=pointer]:
+              - generic [ref=f1e268]: ♧
+              - generic [ref=f1e269]:
+                - strong [ref=f1e270]: Profiling
+                - generic [ref=f1e271]: Consumer records
+              - generic [ref=f1e272]: →
+            - button "▣ Meter Assets Calibrations & logs →" [ref=f1e273] [cursor=pointer]:
+              - generic [ref=f1e274]: ▣
+              - generic [ref=f1e275]:
+                - strong [ref=f1e276]: Meter Assets
+                - generic [ref=f1e277]: Calibrations & logs
+              - generic [ref=f1e278]: →
+            - button "▤ Batch Billing Multi-account run →" [ref=f1e279] [cursor=pointer]:
+              - generic [ref=f1e280]: ▤
+              - generic [ref=f1e281]:
+                - strong [ref=f1e282]: Batch Billing
+                - generic [ref=f1e283]: Multi-account run
+              - generic [ref=f1e284]: →
+            - button "! Arrears Tracker Penalties & aging →" [ref=f1e285] [cursor=pointer]:
+              - generic [ref=f1e286]: "!"
+              - generic [ref=f1e287]:
+                - strong [ref=f1e288]: Arrears Tracker
+                - generic [ref=f1e289]: Penalties & aging
+              - generic [ref=f1e290]: →
+            - button "₱ Payment POS Counter receipts →" [ref=f1e291] [cursor=pointer]:
+              - generic [ref=f1e292]: ₱
+              - generic [ref=f1e293]:
+                - strong [ref=f1e294]: Payment POS
+                - generic [ref=f1e295]: Counter receipts
+              - generic [ref=f1e296]: →
+        - article [ref=f1e297]:
+          - generic [ref=f1e298]:
+            - generic [ref=f1e299]:
+              - paragraph [ref=f1e300]: REPORT PROBLEM
+              - heading "Maintenance & Support" [level=2] [ref=f1e301]
+            - button "View Tickets →" [ref=f1e302] [cursor=pointer]
+          - generic [ref=f1e303]:
+            - generic [ref=f1e304]:
+              - generic [ref=f1e306]:
+                - strong [ref=f1e307]: Low Water Pressure
+                - generic [ref=f1e308]: lee zabala · Bagong Silang
+              - generic [ref=f1e309]: Resolved
+            - generic [ref=f1e310]:
+              - generic [ref=f1e312]:
+                - strong [ref=f1e313]: Low Water Pressure
+                - generic [ref=f1e314]: lee zabala · Bagong Silang
+              - generic [ref=f1e315]: Pending

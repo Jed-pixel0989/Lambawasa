@@ -1,0 +1,261 @@
+- generic [ref=f1e3]:
+  - complementary [ref=f1e4]:
+    - generic [ref=f1e10] [cursor=pointer]:
+      - strong [ref=f1e11]: LAMBAWASA
+      - generic [ref=f1e12]: Integrated Utility Suite
+    - generic [ref=f1e13]:
+      - text: OFFICE STAFFS
+      - generic [ref=f1e14]: 8 ACTIVE
+    - navigation [ref=f1e15]:
+      - button "Overview" [ref=f1e16] [cursor=pointer]
+      - button "Reports" [ref=f1e24] [cursor=pointer]
+      - button "Notifications" [ref=f1e29] [cursor=pointer]
+      - button "Consumers" [ref=f1e35] [cursor=pointer]
+      - button "Meter Assets" [active] [ref=f1e43] [cursor=pointer]
+      - button "Batch Billing" [ref=f1e49] [cursor=pointer]:
+        - generic [ref=f1e54]: "2"
+      - button "Arrears & Penalties" [ref=f1e55] [cursor=pointer]
+      - button "Report Problem" [ref=f1e60] [cursor=pointer]:
+        - generic [ref=f1e70]: "1"
+  - main [ref=f1e71]:
+    - generic [ref=f1e72]:
+      - generic [ref=f1e73]:
+        - text: Lambawasa System
+        - emphasis [ref=f1e74]: /
+        - strong [ref=f1e75]: Meter Assets
+      - generic [ref=f1e76]:
+        - generic [ref=f1e78]:
+          - generic [ref=f1e79]: ⌕
+          - textbox "⌕" [ref=f1e80]:
+            - /placeholder: Global account, meter or bill search...
+        - generic [ref=f1e81]:
+          - generic "Click to Sign Out" [ref=f1e82] [cursor=pointer]:
+            - generic [ref=f1e83]: MR
+            - generic [ref=f1e84]:
+              - strong [ref=f1e85]: Maria Reyes
+              - generic [ref=f1e86]: Office Staffs
+          - button "Sign Out" [ref=f1e87] [cursor=pointer]
+    - generic [ref=f1e316]:
+      - generic [ref=f1e317]:
+        - generic [ref=f1e318]:
+          - generic [ref=f1e319]: Feature 02 · Meter Asset Logging
+          - heading "Meter Asset & Calibration Registry" [level=2] [ref=f1e320]
+          - paragraph [ref=f1e321]: Maintains detailed logs of meter installations, repair schedules, and calibration histories to prevent reading inaccuracies and disputes.
+        - button "＋ Log New Meter" [ref=f1e323] [cursor=pointer]:
+          - generic [ref=f1e324]: ＋
+          - text: Log New Meter
+      - generic [ref=f1e325]:
+        - generic [ref=f1e326]:
+          - heading "Pending Consumption Approvals" [level=3] [ref=f1e327]
+          - generic [ref=f1e328]: 0 Awaiting Review
+        - status [ref=f1e329]: No meter readings are waiting for approval.
+      - generic [ref=f1e330]:
+        - generic [ref=f1e331]:
+          - text: Total Meter Assets
+          - strong [ref=f1e332]: "10"
+          - text: Active in field & warehouse
+        - generic [ref=f1e333]:
+          - text: Calibration Due
+          - strong [ref=f1e334]: "0"
+          - text: Needs bench testing
+        - generic [ref=f1e335]:
+          - text: Under Repair
+          - strong [ref=f1e336]: "0"
+          - text: Dispatched for service
+        - generic [ref=f1e337]:
+          - text: Audit Compliance
+          - strong [ref=f1e338]: 98.5%
+          - text: Calibration validity
+      - generic [ref=f1e339]:
+        - generic [ref=f1e340]:
+          - generic [ref=f1e341]: ⌕
+          - textbox "Search by serial no, brand, consumer, zone..." [ref=f1e342]
+        - generic [ref=f1e343]:
+          - generic [ref=f1e344]: "Status:"
+          - combobox [ref=f1e345]:
+            - option "All Statuses" [selected]
+            - option "Active"
+            - option "Calibration Due"
+            - option "Under Repair"
+      - table [ref=f1e348]:
+        - rowgroup [ref=f1e349]:
+          - row [ref=f1e350]:
+            - columnheader "Meter Serial" [ref=f1e351]
+            - columnheader "Brand & Model" [ref=f1e352]
+            - columnheader "Diameter" [ref=f1e353]
+            - columnheader "Assigned Consumer" [ref=f1e354]
+            - columnheader "Zone" [ref=f1e355]
+            - columnheader "Last Calibrated" [ref=f1e356]
+            - columnheader "Status" [ref=f1e357]
+            - columnheader "Actions" [ref=f1e358]
+        - rowgroup [ref=f1e359]:
+          - row [ref=f1e360]:
+            - cell "MTR-71901Installed 2026-09-16" [ref=f1e361]:
+              - strong [ref=f1e362]: MTR-71901
+              - generic [ref=f1e363]: Installed 2026-09-16
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e364]
+            - cell "1/2 inch" [ref=f1e365]
+            - cell [ref=f1e366]:
+              - strong [ref=f1e367]: Unassigned
+            - cell "Mabuhay" [ref=f1e368]
+            - 'cell "2026-09-16Next: 2028-09-16" [ref=f1e369]':
+              - text: 2026-09-16
+              - generic [ref=f1e370]: "Next: 2028-09-16"
+            - cell "Active" [ref=f1e371]
+            - cell [ref=f1e374]:
+              - generic [ref=f1e375]:
+                - button "History Log" [ref=f1e376] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e377] [cursor=pointer]
+          - row [ref=f1e378]:
+            - cell "MTR-76122Installed 2026-09-23" [ref=f1e379]:
+              - strong [ref=f1e380]: MTR-76122
+              - generic [ref=f1e381]: Installed 2026-09-23
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e382]
+            - cell "1/2 inch" [ref=f1e383]
+            - cell [ref=f1e384]:
+              - strong [ref=f1e385]: Unassigned
+            - cell "Mabuhay" [ref=f1e386]
+            - 'cell "2026-09-23Next: 2028-09-23" [ref=f1e387]':
+              - text: 2026-09-23
+              - generic [ref=f1e388]: "Next: 2028-09-23"
+            - cell "Active" [ref=f1e389]
+            - cell [ref=f1e392]:
+              - generic [ref=f1e393]:
+                - button "History Log" [ref=f1e394] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e395] [cursor=pointer]
+          - row [ref=f1e396]:
+            - cell "MTR-35457Installed 2026-09-23" [ref=f1e397]:
+              - strong [ref=f1e398]: MTR-35457
+              - generic [ref=f1e399]: Installed 2026-09-23
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e400]
+            - cell "1/2 inch" [ref=f1e401]
+            - cell [ref=f1e402]:
+              - strong [ref=f1e403]: Unassigned
+            - cell "Mabuhay" [ref=f1e404]
+            - 'cell "2026-09-23Next: 2028-09-23" [ref=f1e405]':
+              - text: 2026-09-23
+              - generic [ref=f1e406]: "Next: 2028-09-23"
+            - cell "Active" [ref=f1e407]
+            - cell [ref=f1e410]:
+              - generic [ref=f1e411]:
+                - button "History Log" [ref=f1e412] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e413] [cursor=pointer]
+          - row [ref=f1e414]:
+            - cell "MTR-40638Installed 2026-09-25" [ref=f1e415]:
+              - strong [ref=f1e416]: MTR-40638
+              - generic [ref=f1e417]: Installed 2026-09-25
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e418]
+            - cell "1/2 inch" [ref=f1e419]
+            - cell [ref=f1e420]:
+              - strong [ref=f1e421]: Unassigned
+            - cell "Mabuhay" [ref=f1e422]
+            - 'cell "2026-09-25Next: 2028-09-25" [ref=f1e423]':
+              - text: 2026-09-25
+              - generic [ref=f1e424]: "Next: 2028-09-25"
+            - cell "Active" [ref=f1e425]
+            - cell [ref=f1e428]:
+              - generic [ref=f1e429]:
+                - button "History Log" [ref=f1e430] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e431] [cursor=pointer]
+          - row [ref=f1e432]:
+            - cell "MTR-31636Installed 2026-09-25" [ref=f1e433]:
+              - strong [ref=f1e434]: MTR-31636
+              - generic [ref=f1e435]: Installed 2026-09-25
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e436]
+            - cell "1/2 inch" [ref=f1e437]
+            - cell [ref=f1e438]:
+              - strong [ref=f1e439]: Unassigned
+            - cell "Bagong Silang" [ref=f1e440]
+            - 'cell "2026-09-25Next: 2028-09-25" [ref=f1e441]':
+              - text: 2026-09-25
+              - generic [ref=f1e442]: "Next: 2028-09-25"
+            - cell "Active" [ref=f1e443]
+            - cell [ref=f1e446]:
+              - generic [ref=f1e447]:
+                - button "History Log" [ref=f1e448] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e449] [cursor=pointer]
+          - row [ref=f1e450]:
+            - cell "MTR-19586Installed 2026-09-25" [ref=f1e451]:
+              - strong [ref=f1e452]: MTR-19586
+              - generic [ref=f1e453]: Installed 2026-09-25
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e454]
+            - cell "1/2 inch" [ref=f1e455]
+            - cell [ref=f1e456]:
+              - strong [ref=f1e457]: Unassigned
+            - cell "Bagong Silang" [ref=f1e458]
+            - 'cell "2026-09-25Next: 2028-09-25" [ref=f1e459]':
+              - text: 2026-09-25
+              - generic [ref=f1e460]: "Next: 2028-09-25"
+            - cell "Active" [ref=f1e461]
+            - cell [ref=f1e464]:
+              - generic [ref=f1e465]:
+                - button "History Log" [ref=f1e466] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e467] [cursor=pointer]
+          - row [ref=f1e468]:
+            - cell "MTR-73808Installed 2026-09-25" [ref=f1e469]:
+              - strong [ref=f1e470]: MTR-73808
+              - generic [ref=f1e471]: Installed 2026-09-25
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e472]
+            - cell "1/2 inch" [ref=f1e473]
+            - cell [ref=f1e474]:
+              - strong [ref=f1e475]: Jed bandoy
+            - cell "Mabuhay" [ref=f1e476]
+            - 'cell "2026-09-25Next: 2028-09-25" [ref=f1e477]':
+              - text: 2026-09-25
+              - generic [ref=f1e478]: "Next: 2028-09-25"
+            - cell "Active" [ref=f1e479]
+            - cell [ref=f1e482]:
+              - generic [ref=f1e483]:
+                - button "History Log" [ref=f1e484] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e485] [cursor=pointer]
+          - row [ref=f1e486]:
+            - cell "MTR-57212Installed 2026-09-26" [ref=f1e487]:
+              - strong [ref=f1e488]: MTR-57212
+              - generic [ref=f1e489]: Installed 2026-09-26
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e490]
+            - cell "1/2 inch" [ref=f1e491]
+            - cell [ref=f1e492]:
+              - strong [ref=f1e493]: lee zabala
+            - cell "Bagong Silang" [ref=f1e494]
+            - 'cell "2026-09-26Next: 2028-09-26" [ref=f1e495]':
+              - text: 2026-09-26
+              - generic [ref=f1e496]: "Next: 2028-09-26"
+            - cell "Active" [ref=f1e497]
+            - cell [ref=f1e500]:
+              - generic [ref=f1e501]:
+                - button "History Log" [ref=f1e502] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e503] [cursor=pointer]
+          - row [ref=f1e504]:
+            - cell "MTR-966305Installed 2026-10-25" [ref=f1e505]:
+              - strong [ref=f1e506]: MTR-966305
+              - generic [ref=f1e507]: Installed 2026-10-25
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e508]
+            - cell "1/2 inch" [ref=f1e509]
+            - cell [ref=f1e510]:
+              - strong [ref=f1e511]: Unassigned
+            - cell "Mabuhay" [ref=f1e512]
+            - 'cell "2026-10-25Next: 2028-10-25" [ref=f1e513]':
+              - text: 2026-10-25
+              - generic [ref=f1e514]: "Next: 2028-10-25"
+            - cell "Active" [ref=f1e515]
+            - cell [ref=f1e518]:
+              - generic [ref=f1e519]:
+                - button "History Log" [ref=f1e520] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e521] [cursor=pointer]
+          - row [ref=f1e522]:
+            - cell "MTR-463568Installed 2026-10-25" [ref=f1e523]:
+              - strong [ref=f1e524]: MTR-463568
+              - generic [ref=f1e525]: Installed 2026-10-25
+            - cell "Aquaflow ProAF-20-Brass" [ref=f1e526]
+            - cell "1/2 inch" [ref=f1e527]
+            - cell [ref=f1e528]:
+              - strong [ref=f1e529]: Jed Bandoy
+            - cell "Mabuhay" [ref=f1e530]
+            - 'cell "2026-10-25Next: 2028-10-25" [ref=f1e531]':
+              - text: 2026-10-25
+              - generic [ref=f1e532]: "Next: 2028-10-25"
+            - cell "Active" [ref=f1e533]
+            - cell [ref=f1e536]:
+              - generic [ref=f1e537]:
+                - button "History Log" [ref=f1e538] [cursor=pointer]
+                - button "Log Calibration" [ref=f1e539] [cursor=pointer]

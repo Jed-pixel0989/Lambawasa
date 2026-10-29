@@ -1,0 +1,207 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e12]:
+          - strong [ref=e13]: LAMBAWASA
+          - generic [ref=e14]: Municipal Utility System
+        - generic [ref=e15]:
+          - button "✦ Register" [ref=e16] [cursor=pointer]
+          - button "💧 Consumer Login" [ref=e17] [cursor=pointer]:
+            - generic [ref=e18]: 💧
+            - text: Consumer Login
+    - generic [ref=e20]:
+      - generic [ref=e21]: CLOUD & GIS INFRASTRUCTURE · 9 PROPOSED FEATURES ACTIVE
+      - heading "Intelligent Water Utility & Municipal Supply Operations" [level=1] [ref=e24]
+      - paragraph [ref=e25]: A comprehensive, modern platform connecting household profiling, hardware meter calibration, live Google spatial mapping, automated tiered billing, and counter POS collections with complete regulatory accountability.
+      - generic [ref=e26]:
+        - button "💧 Household Consumer Login" [ref=e27] [cursor=pointer]:
+          - generic [ref=e28]: 💧
+          - text: Household Consumer Login
+        - button "✦ Register New Household" [ref=e29] [cursor=pointer]:
+          - generic [ref=e30]: ✦
+          - text: Register New Household
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e33]: ACTIVE CONNECTIONS
+          - strong [ref=e34]: 2,480+
+          - text: Verified Households
+        - generic [ref=e35]:
+          - generic [ref=e36]: METER ACCURACY
+          - strong [ref=e37]: 98.6%
+          - text: Certified Calibration
+        - generic [ref=e38]:
+          - generic [ref=e39]: MONTHLY REVENUE
+          - strong [ref=e40]: ₱ 184K+
+          - text: Real-time Ledger
+        - generic [ref=e41]:
+          - generic [ref=e42]: MUNICIPAL COVERAGE
+          - strong [ref=e43]: 4 Sectors
+          - text: Google GIS Synchronized
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - generic [ref=e46]: COMPREHENSIVE UTILITY ARCHITECTURE
+        - heading "Features of the Proposed System" [level=2] [ref=e47]
+        - paragraph [ref=e48]: Engineered specifically to solve municipal water district bottlenecks, eliminate inaccurate estimations, prevent overdue revenue losses, and guarantee operational transparency.
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - generic [ref=e51]:
+            - generic [ref=e52]: ♧
+            - generic [ref=e53]: Profiling
+          - generic [ref=e54]: Feature 01
+          - heading "Household Profiling System" [level=3] [ref=e55]
+          - paragraph [ref=e56]: Manages complete, verified consumer records to ensure smooth field operations, accurate account tracking, and zero duplicate accounts.
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - generic [ref=e59]: ▣
+            - generic [ref=e60]: Hardware
+          - generic [ref=e61]: Feature 02
+          - heading "Meter Asset Logging" [level=3] [ref=e62]
+          - paragraph [ref=e63]: Maintains detailed logs of meter installations, repair schedules, and calibration histories to prevent reading inaccuracies and disputes.
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - generic [ref=e66]: 🗺️
+            - generic [ref=e67]: Google GIS
+          - generic [ref=e68]: Feature 03
+          - heading "Geographical Mapping" [level=3] [ref=e69]
+          - paragraph [ref=e70]: Google Maps spatial base layer tracking individual connections, eliminating locational errors, and supporting drag-and-drop admin pin relocation.
+        - generic [ref=e71]:
+          - generic [ref=e72]:
+            - generic [ref=e73]: 🧮
+            - generic [ref=e74]: Math Engine
+          - generic [ref=e75]: Feature 04
+          - heading "Automated Consumption Calculator" [level=3] [ref=e76]
+          - paragraph [ref=e77]: Codified tiered tariff engine computing precise household usage automatically with dial inversion and usage spike anomaly detection.
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - generic [ref=e80]: ▤
+            - generic [ref=e81]: Billing Runs
+          - generic [ref=e82]: Feature 05
+          - heading "Batch Bill Generation" [level=3] [ref=e83]
+          - paragraph [ref=e84]: Automates multi-account billing runs using verified meter readings to prevent operational delays during peak monthly billing periods.
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - generic [ref=e87]: ⚠️
+            - generic [ref=e88]: Arrears
+          - generic [ref=e89]: Feature 06
+          - heading "Arrears & Penalty Tracker" [level=3] [ref=e90]
+          - paragraph [ref=e91]: Flags unpaid accounts, categorizes aging brackets, and automatically computes 10% statutory overdue penalties and 48-hour disconnection notices.
+        - generic [ref=e92]:
+          - generic [ref=e93]:
+            - generic [ref=e94]: ₱
+            - generic [ref=e95]: Cashier Terminal
+          - generic [ref=e96]: Feature 07
+          - heading "Payment P.O.S. (Point of Sale)" [level=3] [ref=e97]
+          - paragraph [ref=e98]: Facilitates fast cashier counter payments with instant Official Receipts (O.R.), automatic change calculation, and real-time ledger updates.
+        - generic [ref=e99]:
+          - generic [ref=e100]:
+            - generic [ref=e101]: 🛡️
+            - generic [ref=e102]: Audit Trail
+          - generic [ref=e103]: Feature 08
+          - heading "Operational Audit Trail" [level=3] [ref=e104]
+          - paragraph [ref=e105]: Immutable security ledger logging all user actions, system modifications, terminal origins, and timestamps for absolute accountability.
+        - generic [ref=e106]:
+          - generic [ref=e107]:
+            - generic [ref=e108]: ◇
+            - generic [ref=e109]: Report Problem
+          - generic [ref=e110]: Feature 09
+          - heading "Maintenance & Complaint Log" [level=3] [ref=e111]
+          - paragraph [ref=e112]: End-to-end problem reporting for consumer support tickets, pipe leaks, and water pressure repairs from intake to field resolution.
+    - generic [ref=e114]:
+      - generic [ref=e115]:
+        - generic [ref=e116]: TRANSPARENT CONSUMER BILLING
+        - heading "Estimate Monthly Household Consumption" [level=2] [ref=e117]
+        - paragraph [ref=e118]: Under our Automated Consumption Calculator, every drop is computed using codified tiered tariffs. Experience transparent billing arithmetic with zero hidden fees.
+        - generic [ref=e119]:
+          - heading "Approved District Tariff Schedule:" [level=4] [ref=e120]
+          - list [ref=e121]:
+            - listitem [ref=e122]:
+              - generic [ref=e123]: "First 10 m³ (Minimum Base):"
+              - strong [ref=e124]: ₱ 180.00
+            - listitem [ref=e125]:
+              - generic [ref=e126]: "11 to 20 m³:"
+              - strong [ref=e127]: ₱ 22.50 / m³
+            - listitem [ref=e128]:
+              - generic [ref=e129]: "21 to 30 m³:"
+              - strong [ref=e130]: ₱ 28.00 / m³
+            - listitem [ref=e131]:
+              - generic [ref=e132]: "Over 30 m³:"
+              - strong [ref=e133]: ₱ 35.00 / m³
+            - listitem [ref=e134]:
+              - generic [ref=e135]: "Environmental Sewerage Fee:"
+              - strong [ref=e136]: 10% of base
+            - listitem [ref=e137]:
+              - generic [ref=e138]: "Meter Maintenance Fee:"
+              - strong [ref=e139]: ₱ 25.00 fixed
+      - generic [ref=e140]:
+        - heading "Interactive Usage Calculator" [level=3] [ref=e141]
+        - paragraph [ref=e142]: "Adjust your expected monthly water usage volume:"
+        - generic [ref=e143]: "Rate Classification:"
+        - generic [ref=e144]:
+          - button "Residential" [ref=e145] [cursor=pointer]
+          - button "Commercial" [ref=e146] [cursor=pointer]
+        - generic [ref=e147]:
+          - text: "Monthly Usage:"
+          - strong [ref=e148]: 18 m³
+          - text: (18000 Liters)
+        - slider [ref=e149] [cursor=pointer]: "18"
+        - generic [ref=e150]:
+          - generic [ref=e151]:
+            - generic [ref=e152]: "Base Commodity Rate:"
+            - strong [ref=e153]: ₱ 360.00
+          - generic [ref=e154]:
+            - generic [ref=e155]: "Environmental Fee (10%):"
+            - strong [ref=e156]: ₱ 36.00
+          - generic [ref=e157]:
+            - generic [ref=e158]: "Meter Maintenance:"
+            - strong [ref=e159]: ₱ 25.00
+          - generic [ref=e161]:
+            - generic [ref=e162]: "Estimated Monthly Bill:"
+            - strong [ref=e163]: ₱ 421.00
+    - generic [ref=e164]:
+      - generic [ref=e165]:
+        - generic [ref=e166]: SPATIAL FIELD MANAGEMENT
+        - heading "Google Maps GIS & Household Locator" [level=2] [ref=e167]
+        - paragraph [ref=e168]: Eliminate locational errors during meter reading runs, leak repairs, and disconnection dispatches with real-time coordinate mapping.
+      - generic [ref=e170]:
+        - strong [ref=e173]: Google Base Layer Integration (Roadmap · Satellite Hybrid · Terrain)
+        - paragraph [ref=e174]: Field officers and district engineers can locate every water curb stop, inspect meter calibration health, or drop new pins using Google GPS coordinates.
+        - generic [ref=e175]:
+          - generic [ref=e176]: 📍 Mabuhay Sector (486 Connections)
+          - generic [ref=e177]: 📍 Riverside Supply Line (328 Connections)
+          - generic [ref=e178]: 📍 Hillview Booster Reservoir (382 Connections)
+          - generic [ref=e179]: 📍 East Market Commercial Loop (514 Connections)
+    - generic [ref=e182]:
+      - text: 24/7 REPORT PROBLEM
+      - heading "Need Emergency Water Assistance?" [level=2] [ref=e183]
+      - paragraph [ref=e184]: Report pipe bursts, mainline leaks, low water pressure, or discolored water. Rapid field response teams are stationed in each sector.
+      - generic [ref=e185]:
+        - generic [ref=e186]:
+          - generic [ref=e187]: EMERGENCY DISPATCH
+          - strong [ref=e188]: (02) 8912-WATER
+        - generic [ref=e189]:
+          - generic [ref=e190]: SMS REPAIR DESK
+          - strong [ref=e191]: +63 917 111 2233
+    - contentinfo [ref=e192]:
+      - generic [ref=e193]:
+        - generic [ref=e194]:
+          - strong [ref=e199]: LAMBAWASA
+          - paragraph [ref=e200]: Republic of the Philippines · Municipal Waterworks & Utility Systems
+        - generic [ref=e201]: All Municipal Pipelines, Google GIS Nodes & Billing Servers Operational
+      - generic [ref=e204]: © 2026 Lambawasa Utility Management System. All Rights Reserved. Codified in compliance with Public Utility Standards.
+  - generic [ref=e206]:
+    - button "Close dialog" [ref=e207] [cursor=pointer]
+    - generic [ref=e216]:
+      - heading "Household Consumer" [level=2] [ref=e217]
+      - paragraph [ref=e218]: Check water statements, meter twin & pay bills
+    - generic [ref=e219]:
+      - generic [ref=e220]:
+        - generic [ref=e221]: Account No / Username
+        - textbox "e.g. ACC-88201 or amina.okafor" [active] [ref=e224]
+      - generic [ref=e225]:
+        - generic [ref=e226]: Security PIN / Password
+        - textbox "••••••••" [ref=e229]
+      - button "Sign In to Consumer Portal" [ref=e230] [cursor=pointer]
+      - generic [ref=e234]:
+        - text: New household in Lambawasa?
+        - button "Register Account" [ref=e235] [cursor=pointer]

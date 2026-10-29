@@ -1,0 +1,353 @@
+[     142ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/react-dom_client.js?v=1044093a:14335
+[  150351ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/data.php:0
+[  150352ms] [ERROR] Failed to fetch system data from database: Error: HTTP 500
+    at Object.fetchSystemData (http://localhost:5175/src/services/api.js:30:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx:502:21) @ http://localhost:5175/@vite/client:532
+[  151094ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/data.php:0
+[  151094ms] [ERROR] Failed to fetch system data from database: Error: HTTP 500
+    at Object.fetchSystemData (http://localhost:5175/src/services/api.js?t=1792901824855:30:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:499:21) @ http://localhost:5175/@vite/client:532
+[  176095ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/data.php:0
+[  176096ms] [ERROR] Failed to fetch system data from database: Error: HTTP 500
+    at Object.fetchSystemData (http://localhost:5175/src/services/api.js?t=1792901824855:30:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:499:21) @ http://localhost:5175/@vite/client:532
+[  201111ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/data.php:0
+[  201112ms] [ERROR] Failed to fetch system data from database: Error: HTTP 500
+    at Object.fetchSystemData (http://localhost:5175/src/services/api.js?t=1792901824855:30:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:499:21) @ http://localhost:5175/@vite/client:532
+[  228057ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  228058ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  230099ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  230100ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  253078ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  253078ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  255117ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  255117ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  278041ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  278042ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  280092ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  280092ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  303055ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  303056ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  305091ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  305091ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  328073ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  328073ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  330107ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  330107ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  353059ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  353060ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  355184ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  355185ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  378085ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  378086ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  380119ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  380119ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  403086ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  403133ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  405179ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  405179ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  428101ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  428101ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  430144ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  430144ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  453041ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  453041ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  455093ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  455093ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901842287:496:19) @ http://localhost:5175/@vite/client:532
+[  472278ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5175/@vite/client:1002
+[  836048ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/react-dom_client.js?v=1044093a:14335
+[  838394ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  838396ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  840434ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  840435ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  840451ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  840451ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[  842479ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  842480ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[  863410ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  863411ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  865459ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  865460ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[  888412ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  888413ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  890450ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  890450ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[  913420ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  913420ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  915484ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  915485ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[  938419ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  938420ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  940460ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  940461ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[  963403ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  963404ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  965453ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  965454ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[  988406ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[  988407ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[  990457ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[  990458ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1013408ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1013409ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1015443ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1015444ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1038399ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1038400ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1040448ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1040449ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1063404ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1063405ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1065433ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1065434ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1088395ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1088396ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1090432ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1090432ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1113410ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1113411ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1115452ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1115452ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1121701ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5175/@vite/client:1002
+[ 1138408ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1138409ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1140472ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1140472ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1163406ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1163407ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1165438ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1165438ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1188415ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1188416ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1190475ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1190475ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1213407ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1213407ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1215445ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1215445ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1238422ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1238423ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1240446ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1240446ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1263401ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1263402ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1265452ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1265452ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1288416ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1288417ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1290449ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1290450ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1313404ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1313404ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1315447ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1315448ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1338428ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1338429ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1340463ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1340463ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1363409ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1363409ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1365478ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1365479ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1388423ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1388424ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1390447ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1390448ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1413392ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1413392ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1415405ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1415406ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1438408ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1438409ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1440431ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1440431ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1463405ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1463406ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1465437ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1465437ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1488402ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1488404ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1490432ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1490433ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1513417ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1513418ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1515447ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1515447ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1538415ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1538417ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1540450ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1540450ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1563397ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1563398ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1565428ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1565428ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1588391ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1588392ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1590407ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1590407ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1613432ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1613433ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1615458ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1615459ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1638419ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1638419ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1640444ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1640444ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1663400ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1663401ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1665433ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1665433ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1688400ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1688401ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1690432ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1690432ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1713395ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1713396ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1715430ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1715431ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1738425ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1738426ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1740473ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1740473ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1763429ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1763429ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1765462ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1765463ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1788409ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1788410ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1790471ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1790471ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1813429ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1813429ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1815484ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1815485ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1838406ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1838407ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1840442ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1840443ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1869942ms] [ERROR] API scheduled billing error: SyntaxError: Unexpected token '<', "<br />
+<b>"... is not valid JSON @ http://localhost:5175/@vite/client:532
+[ 1869942ms] [WARNING] Scheduled billing check failed: Unexpected token '<', "<br />
+<b>"... is not valid JSON @ http://localhost:5175/@vite/client:532
+[ 1871966ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1871966ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1890830ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1890832ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1892884ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1892885ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 1915830ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/bills.php?action=scheduled:0
+[ 1915831ms] [WARNING] Scheduled billing check failed: Database connection failed: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it @ http://localhost:5175/@vite/client:532
+[ 1917863ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost/SIA/api/status.php:0
+[ 1917863ms] [WARNING] DB Status Check Error: Error: HTTP 500
+    at Object.checkDbStatus (http://localhost:5175/src/services/api.js?t=1792901824855:14:23)
+    at async syncFromDatabase (http://localhost:5175/src/App.jsx?t=1792901855675:496:19) @ http://localhost:5175/@vite/client:532
+[ 2005754ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/react-dom_client.js?v=041e23c8:14335

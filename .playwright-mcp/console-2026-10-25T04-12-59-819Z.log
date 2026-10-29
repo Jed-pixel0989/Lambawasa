@@ -1,0 +1,10 @@
+[     526ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5175/node_modules/.vite/deps/react-dom_client.js?v=1044093a:14335
+[    1059ms] [ERROR] API createNotification error: SyntaxError: Unexpected token '<', "<br />
+<b>"... is not valid JSON @ http://localhost:5175/@vite/client:532
+[    1066ms] [ERROR] API createNotification error: SyntaxError: Unexpected token '<', "<br />
+<b>"... is not valid JSON @ http://localhost:5175/@vite/client:532
+[    1067ms] [ERROR] API createNotification error: SyntaxError: Unexpected token '<', "<br />
+<b>"... is not valid JSON @ http://localhost:5175/@vite/client:532
+[    1068ms] [ERROR] API createNotification error: SyntaxError: Unexpected token '<', "<br />
+<b>"... is not valid JSON @ http://localhost:5175/@vite/client:532
+[   36163ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5175/:0
